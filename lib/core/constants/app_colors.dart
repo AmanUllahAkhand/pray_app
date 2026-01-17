@@ -5,3 +5,4 @@ const Color backgroundColor = Color(0xFFFFFFFF);
 const Color textColor = Color(0xFF000000);
 const Color accentColor = Color(0xFF4CAF50);
 const Color prohibitedColor = Color(0xFFFFC107);
+const Color dragonBayColor = Color(0xFF5EAB9E);

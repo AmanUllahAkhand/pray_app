@@ -3,5 +3,18 @@
   "Prayer": "Prayer",
   "Quran": "Quran",
   "Tasbih": "Tasbih",
-  "More": "More"
+  "More": "More",
+  "hijri_month_1": "Muharram",
+  "hijri_month_2": "Safar",
+  "hijri_month_3": "Rabi al-Awwal",
+  "hijri_month_4": "Rabi al-Thani",
+  "hijri_month_5": "Jumada al-Awwal",
+  "hijri_month_6": "Jumada al-Thani",
+  "hijri_month_7": "Rajab",
+  "hijri_month_8": "Shaban",
+  "hijri_month_9": "Ramadan",
+  "hijri_month_10": "Shawwal",
+  "hijri_month_11": "Dhul Qadah",
+  "hijri_month_12": "Dhul Hijjah",
+  "ah": "AH"
 }

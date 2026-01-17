@@ -10,7 +10,7 @@ void main() async {
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('en'), Locale('bn')],
-      path: 'assets/lang',
+      path: 'assets/lang', // localization files path
       fallbackLocale: const Locale('en'),
       child: const MyApp(),
     ),
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Pray App',
-      theme: appTheme,
+      theme: appTheme, // Material 3 theme should be defined in app_theme.dart
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,

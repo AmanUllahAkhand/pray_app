@@ -7,11 +7,11 @@ abstract class AppIcons {
   static const more = 'assets/images/more.svg';
 
   // ── Prayer Times Icons ─────────────────────────────────────────────────────
-  static const fajr = 'assets/icons/fajr_icon.svg';
-  static const dhuhr = 'assets/icons/dhuhr_icon.svg';
-  static const asr = 'assets/icons/asr_icon.svg';
-  static const maghrib = 'assets/icons/maghrib_icon.svg';
-  static const isha = 'assets/icons/isha_icon.svg';
+  static const fajr = 'assets/images/fajr_icon.svg';
+  static const dhuhr = 'assets/images/dhuhr_icon.svg';
+  static const asr = 'assets/images/asr_icon.svg';
+  static const maghrib = 'assets/images/maghrib_icon.svg';
+  static const isha = 'assets/images/isha_icon.svg';
 
   // ── Other Common Icons ─────────────────────────────────────────────────────
   static const location = 'assets/icons/location_pin.svg';
@@ -30,7 +30,13 @@ abstract class AppIcons {
   static const appLogo = 'assets/icons/app_logo.svg';
   static const splashBackground = 'assets/images/splash_background.svg';
 
+// ── location ──────────────────────────────────────────────────────────
+  static const locationPin = 'assets/images/location_pin.svg';
+  static const donate = 'assets/images/donate.svg';
+  static const boy = 'assets/images/boy.svg';
 // ── Add more icons here as your app grows ──────────────────────────────────
 // static const notification = 'assets/icons/notification.svg';
 // static const settings = 'assets/icons/settings.svg';
 }
+//ex:
+// SvgPicture.asset(AppIcons.splashBackground,fit: BoxFit.cover,),

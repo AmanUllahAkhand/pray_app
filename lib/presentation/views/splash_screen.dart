@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pray_app/core/constants/app_colors.dart';
+import 'package:pray_app/core/constants/app_icons.dart';
 import 'package:pray_app/core/routes/app_routes.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -25,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: primaryColor,
       body: Center(
-        child: SvgPicture.asset('assets/images/splash_background.svg'),
+        child: SvgPicture.asset(AppIcons.splashBackground),
       ),
     );
   }

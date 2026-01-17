@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:pray_app/presentation/controllers/home_controller.dart';
 import 'package:pray_app/presentation/widgets/custom_text.dart';
 import 'package:pray_app/presentation/widgets/homeScreen/prayer_time_card.dart';
 import 'package:pray_app/presentation/widgets/homeScreen/prohibited_times_section.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_icons.dart';
 import 'feature_button.dart';
 
 class HomeContent extends StatelessWidget {
@@ -20,38 +22,150 @@ class HomeContent extends StatelessWidget {
           child: CircularProgressIndicator(color: primaryColor),
         );
       }
-
       return SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Left part: SVG + Text
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      AppIcons.locationPin,
+                      width: 24,
+                      height: 24,
+                    ),
+                    const SizedBox(width: 8),
+                    const CustomText(
+                      text: "Dhaka, Bangladesh",
+                      fontSize: 14 ,
+                      fontWeight: FontWeight.w400,
+                      color: backgroundColor,
+                    )
+                  ],
+                ),
+
+                // Right part: Button
+                ElevatedButton(
+                  onPressed: () {
+                    // Button action
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: dragonBayColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  ),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        AppIcons.donate,
+                        width: 24,
+                        height: 24,
+                      ),
+                      const SizedBox(width: 8),
+                      const CustomText(
+                        text: "Support Us",
+                        fontSize: 14 ,
+                        fontWeight: FontWeight.w400,
+                        color: backgroundColor,
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 8),
 
             // Hijri date
             CustomText(
-              text: ctrl.hijriDate.value,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
+              text: ctrl.formatHijriDate(ctrl.hijriDate.value),
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              color: backgroundColor,
             ),
             const SizedBox(height: 4),
 
-            // Current / Next prayer
-            CustomText(
-              text: ctrl.currentPrayer.value,
-              fontSize: 26,
-              fontWeight: FontWeight.bold,
-              color: primaryColor,
-            ),
-            const SizedBox(height: 4),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Left side: Prayer info
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Current / Next prayer
+                    Row(
+                      children: [
+                        CustomText(
+                          text: ctrl.currentPrayer.value,
+                          fontSize: 28,
+                          fontWeight: FontWeight.w400,
+                          color: backgroundColor,
+                        ),
+                        const SizedBox(width: 8),
+                        SvgPicture.asset(
+                          ctrl.getPrayerIcon(ctrl.currentPrayer.value),
+                          width: 24,
+                          height: 24,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
 
-            // Time left
-            CustomText(
-              text: "Time Left: ${ctrl.timeLeft.value} (Approx)",
-              fontSize: 16,
-              color: Colors.grey,
+                    // Current Time (Live) + Start time label
+                    Obx(() {
+                      final parts = ctrl.currentTime.value.split(' '); // ["03:11", "PM"]
+                      return Row(
+                        children: [
+                          CustomText(
+                            text: parts.isNotEmpty ? parts[0] : '',
+                            fontSize: 40,
+                            fontWeight: FontWeight.w700,
+                            color: backgroundColor,
+                          ),
+                          const SizedBox(width: 5),
+                          CustomText(
+                            text: parts.length > 1 ? parts[1] : '',
+                            fontSize: 28,
+                            fontWeight: FontWeight.w400,
+                            color: backgroundColor,
+                          ),
+                          const SizedBox(width: 5),
+                          const CustomText(
+                            text: "(Start Time)",
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: backgroundColor,
+                          ),
+                        ],
+                      );
+                    }),
+                    const SizedBox(height: 4),
+
+                    // Time Left
+                    CustomText(
+                      text: "Time Left: ${ctrl.timeLeft.value} (Approx)",
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: backgroundColor,
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
+
+                // Right side: SVG image
+                SvgPicture.asset(
+                  AppIcons.boy,
+                ),
+                SizedBox(width: 20,)
+              ],
             ),
-            const SizedBox(height: 20),
+
 
             // Prayer times horizontal cards
             _buildPrayerTimesRow(ctrl),
@@ -108,25 +222,19 @@ class HomeContent extends StatelessWidget {
     final times = ctrl.prayerTime.value!;
     final names = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
     final icons = [
-      Icons.nightlight_round,
-      Icons.wb_sunny,
-      Icons.wb_twilight,
-      Icons.nights_stay,
-      Icons.dark_mode,
+      AppIcons.fajr,
+      AppIcons.dhuhr,
+      AppIcons.asr,
+      AppIcons.maghrib,
+      AppIcons.isha,
+
     ];
 
-    final timeValues = [
-      times.fajr,
-      times.dhuhr,
-      times.asr,
-      times.maghrib,
-      times.isha,
-    ];
 
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.teal.shade700.withOpacity(0.15),
+        color: dragonBayColor,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -135,7 +243,7 @@ class HomeContent extends StatelessWidget {
           final isActive = ctrl.currentPrayer.value == names[index];
           return PrayerTimeCard(
             name: names[index],
-            time: ctrl.formatTime(timeValues[index]),
+            time: ctrl.prayerRanges[names[index]] ?? '',
             icon: icons[index],
             isActive: isActive,
           );

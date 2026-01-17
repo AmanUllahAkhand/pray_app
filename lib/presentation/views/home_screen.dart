@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:pray_app/presentation/controllers/home_controller.dart';
 import 'package:pray_app/presentation/controllers/location_controller.dart';
 import 'package:pray_app/presentation/widgets/homeScreen/bottom_nav_bar.dart';
+import '../../core/constants/app_icons.dart';
 import '../widgets/homeScreen/home_content.dart';
 import 'prayer_screen.dart';
 import 'quran_screen.dart';
@@ -18,25 +20,38 @@ class HomeScreen extends GetView<HomeController> {
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            Expanded(
-              child: Obx(() {
-                switch (controller.selectedIndex.value) {
-                  case 0:
-                    return const HomeContent();
-                  case 1:
-                    return const PrayerScreen();
-                  case 2:
-                    return const QuranScreen();
-                  case 3:
-                    return const TasbihScreen();
-                  case 4:
-                    return const MoreScreen();
-                  default:
-                    return const HomeContent();
-                }
-              }),
+            // Background SVG
+            Positioned.fill(
+              child: SvgPicture.asset(
+                AppIcons.splashBackground,
+                fit: BoxFit.cover,
+              ),
+            ),
+
+            // Main content
+            Column(
+              children: [
+                Expanded(
+                  child: Obx(() {
+                    switch (controller.selectedIndex.value) {
+                      case 0:
+                        return const HomeContent();
+                      case 1:
+                        return const PrayerScreen();
+                      case 2:
+                        return const QuranScreen();
+                      case 3:
+                        return const TasbihScreen();
+                      case 4:
+                        return const MoreScreen();
+                      default:
+                        return const HomeContent();
+                    }
+                  }),
+                ),
+              ],
             ),
           ],
         ),
@@ -47,3 +62,4 @@ class HomeScreen extends GetView<HomeController> {
     );
   }
 }
+

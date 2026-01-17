@@ -16,7 +16,7 @@ class ImageFeatureCardsSection extends StatelessWidget {
         // LEFT: Record Your Prayer
         SizedBox(
           width: cardWidth,
-          height: 180,
+          height: 200,
           child: SvgFeatureCard(
             title: "Record Your Prayer",
             svgPath: AppIcons.record_prayer_bg,
@@ -31,7 +31,7 @@ class ImageFeatureCardsSection extends StatelessWidget {
           children: [
             SizedBox(
               width: cardWidth,
-              height: 85,
+              height: 95,
               child: SvgFeatureCard(
                 title: "Qibla Finder",
                 svgPath: AppIcons.qibla_finder_bg,
@@ -43,7 +43,7 @@ class ImageFeatureCardsSection extends StatelessWidget {
 
             SizedBox(
               width: cardWidth,
-              height: 85,
+              height: 95,
               child: SvgFeatureCard(
                 title: "Tashbih Counter",
                 svgPath: AppIcons.tashbih_counter_bg,

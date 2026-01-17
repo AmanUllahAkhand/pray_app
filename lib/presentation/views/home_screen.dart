@@ -1,14 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
-import 'package:pray_app/presentation/controllers/home_controller.dart';
-import 'package:pray_app/presentation/controllers/location_controller.dart';
-import 'package:pray_app/presentation/widgets/homeScreen/bottom_nav_bar.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:pray_app/presentation/views/prayer_screen.dart';
+import 'package:pray_app/presentation/views/quran_screen.dart';
+import 'package:pray_app/presentation/views/tasbih_screen.dart';
 import '../../core/constants/app_icons.dart';
+import '../controllers/home_controller.dart';
+import '../widgets/homeScreen/bottom_nav_bar.dart';
 import '../widgets/homeScreen/home_content.dart';
-import 'prayer_screen.dart';
-import 'quran_screen.dart';
-import 'tasbih_screen.dart';
 import 'more_screen.dart';
 
 class HomeScreen extends GetView<HomeController> {
@@ -16,22 +17,20 @@ class HomeScreen extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final locationCtrl = Get.find<LocationController>();
-
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            // Background SVG
-            Positioned.fill(
-              child: SvgPicture.asset(
-                AppIcons.splashBackground,
-                fit: BoxFit.cover,
-              ),
+      body: Stack(
+        children: [
+          // ✅ FULL SCREEN BACKGROUND (no SafeArea)
+          Positioned.fill(
+            child: SvgPicture.asset(
+              AppIcons.splashBackground,
+              fit: BoxFit.cover,
             ),
+          ),
 
-            // Main content
-            Column(
+          // ✅ Content respects SafeArea
+          SafeArea(
+            child: Column(
               children: [
                 Expanded(
                   child: Obx(() {
@@ -53,8 +52,8 @@ class HomeScreen extends GetView<HomeController> {
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
 
       // Bottom Navigation Bar
@@ -62,4 +61,3 @@ class HomeScreen extends GetView<HomeController> {
     );
   }
 }
-

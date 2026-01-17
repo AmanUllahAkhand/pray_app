@@ -1,13 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:pray_app/presentation/controllers/home_controller.dart';
-import 'package:pray_app/presentation/widgets/custom_text.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:pray_app/presentation/widgets/homeScreen/prayer_time_card.dart';
 import 'package:pray_app/presentation/widgets/homeScreen/prohibited_times_section.dart';
+
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_icons.dart';
-import 'feature_button.dart';
+import '../../controllers/home_controller.dart';
+import '../custom_text.dart';
+import 'feature_button_grid.dart';
+import 'image_card.dart';
 
 class HomeContent extends StatelessWidget {
   const HomeContent({super.key});
@@ -18,200 +22,211 @@ class HomeContent extends StatelessWidget {
 
     return Obx(() {
       if (ctrl.prayerTime.value == null) {
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(color: primaryColor),
         );
       }
+
       return SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Left part: SVG + Text
-                Row(
-                  children: [
-                    SvgPicture.asset(
-                      AppIcons.locationPin,
-                      width: 24,
-                      height: 24,
-                    ),
-                    const SizedBox(width: 8),
-                    const CustomText(
-                      text: "Dhaka, Bangladesh",
-                      fontSize: 14 ,
-                      fontWeight: FontWeight.w400,
-                      color: backgroundColor,
-                    )
-                  ],
-                ),
-
-                // Right part: Button
-                ElevatedButton(
-                  onPressed: () {
-                    // Button action
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: dragonBayColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  ),
-                  child: Row(
+            // ================= TOP GREEN SECTION =================
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Location + Support
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SvgPicture.asset(
-                        AppIcons.donate,
-                        width: 24,
-                        height: 24,
-                      ),
-                      const SizedBox(width: 8),
-                      const CustomText(
-                        text: "Support Us",
-                        fontSize: 14 ,
-                        fontWeight: FontWeight.w400,
-                        color: backgroundColor,
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-
-            // Hijri date
-            CustomText(
-              text: ctrl.formatHijriDate(ctrl.hijriDate.value),
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: backgroundColor,
-            ),
-            const SizedBox(height: 4),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Left side: Prayer info
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Current / Next prayer
-                    Row(
-                      children: [
-                        CustomText(
-                          text: ctrl.currentPrayer.value,
-                          fontSize: 28,
-                          fontWeight: FontWeight.w400,
-                          color: backgroundColor,
-                        ),
-                        const SizedBox(width: 8),
-                        SvgPicture.asset(
-                          ctrl.getPrayerIcon(ctrl.currentPrayer.value),
-                          width: 24,
-                          height: 24,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-
-                    // Current Time (Live) + Start time label
-                    Obx(() {
-                      final parts = ctrl.currentTime.value.split(' '); // ["03:11", "PM"]
-                      return Row(
+                      Row(
                         children: [
-                          CustomText(
-                            text: parts.isNotEmpty ? parts[0] : '',
-                            fontSize: 40,
-                            fontWeight: FontWeight.w700,
-                            color: backgroundColor,
+                          SvgPicture.asset(
+                            AppIcons.locationPin,
+                            width: 24,
+                            height: 24,
                           ),
-                          const SizedBox(width: 5),
-                          CustomText(
-                            text: parts.length > 1 ? parts[1] : '',
-                            fontSize: 28,
-                            fontWeight: FontWeight.w400,
-                            color: backgroundColor,
-                          ),
-                          const SizedBox(width: 5),
+                          const SizedBox(width: 8),
                           const CustomText(
-                            text: "(Start Time)",
+                            text: "Dhaka, Bangladesh",
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                             color: backgroundColor,
                           ),
                         ],
-                      );
-                    }),
-                    const SizedBox(height: 4),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: dragonBayColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
+                        ),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              AppIcons.donate,
+                              width: 24,
+                              height: 24,
+                            ),
+                            const SizedBox(width: 8),
+                            const CustomText(
+                              text: "Support Us",
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: backgroundColor,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
 
-                    // Time Left
-                    CustomText(
-                      text: "Time Left: ${ctrl.timeLeft.value} (Approx)",
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: backgroundColor,
+                  const SizedBox(height: 8),
+
+                  // Hijri Date
+                  CustomText(
+                    text: ctrl.formatHijriDate(ctrl.hijriDate.value),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: backgroundColor,
+                  ),
+
+                  const SizedBox(height: 6),
+
+                  // Prayer + Boy
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Left
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                CustomText(
+                                  text: ctrl.currentPrayer.value,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.w400,
+                                  color: backgroundColor,
+                                ),
+                                const SizedBox(width: 8),
+                                SvgPicture.asset(
+                                  ctrl.getPrayerIcon(
+                                      ctrl.currentPrayer.value),
+                                  width: 24,
+                                  height: 24,
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 6),
+
+                            Obx(() {
+                              final parts =
+                              ctrl.currentTime.value.split(' ');
+                              return Row(
+                                children: [
+                                  CustomText(
+                                    text:
+                                    parts.isNotEmpty ? parts[0] : '',
+                                    fontSize: 40,
+                                    fontWeight: FontWeight.w700,
+                                    color: backgroundColor,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  CustomText(
+                                    text:
+                                    parts.length > 1 ? parts[1] : '',
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.w400,
+                                    color: backgroundColor,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  const CustomText(
+                                    text: "(Start Time)",
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: backgroundColor,
+                                  ),
+                                ],
+                              );
+                            }),
+
+                            const SizedBox(height: 6),
+
+                            CustomText(
+                              text:
+                              "Time Left: ${ctrl.timeLeft.value} (Approx)",
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: backgroundColor,
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      SvgPicture.asset(AppIcons.boy),
+                    ],
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Prayer Times Card
+                  _buildPrayerTimesRow(ctrl),
+
+                ],
+              ),
+            ),
+
+            // ================= WHITE CARD SECTION =================
+            Container(
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+              ),
+              padding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Feature Buttons
+                  const FeatureButtonGrid(),
+                  const SizedBox(height: 20),
+                  const ImageFeatureCardsSection(),
+
+                  // Ads Section
+                  Container(
+                    height: 50,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    const SizedBox(height: 20),
-                  ],
-                ),
+                    child: const CustomText(
+                      text: "Ads Section",
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black,
+                    ),
+                  ),
 
-                // Right side: SVG image
-                SvgPicture.asset(
-                  AppIcons.boy,
-                ),
-                SizedBox(width: 20,)
-              ],
+                  const SizedBox(height: 20),
+
+                  // Prohibited Times
+                  const ProhibitedTimesSection(),
+                ],
+              ),
             ),
-
-
-            // Prayer times horizontal cards
-            _buildPrayerTimesRow(ctrl),
-
-            const SizedBox(height: 24),
-
-            // Feature buttons grid
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                FeatureButton(
-                  title: "Record Your Prayer",
-                  icon: Icons.calendar_today,
-                  onTap: () {
-                    // TODO: navigate or open bottom sheet
-                  },
-                ),
-                FeatureButton(
-                  title: "Qibla Finder",
-                  icon: Icons.compass_calibration,
-                  onTap: () {
-                    // TODO: Get.toNamed('/qibla');
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                FeatureButton(
-                  title: "Tasbih Counter",
-                  icon: Icons.pan_tool,
-                  onTap: () {
-                    // TODO: navigate to tasbih or open counter
-                  },
-                ),
-                const SizedBox(width: 80), // placeholder for spacing
-              ],
-            ),
-
-            const SizedBox(height: 32),
-
-            // Prohibited times
-            const ProhibitedTimesSection(),
-            const SizedBox(height: 80),
           ],
         ),
       );
@@ -219,7 +234,6 @@ class HomeContent extends StatelessWidget {
   }
 
   Widget _buildPrayerTimesRow(HomeController ctrl) {
-    final times = ctrl.prayerTime.value!;
     final names = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
     final icons = [
       AppIcons.fajr,
@@ -227,9 +241,7 @@ class HomeContent extends StatelessWidget {
       AppIcons.asr,
       AppIcons.maghrib,
       AppIcons.isha,
-
     ];
-
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -240,7 +252,8 @@ class HomeContent extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: List.generate(5, (index) {
-          final isActive = ctrl.currentPrayer.value == names[index];
+          final isActive =
+              ctrl.currentPrayer.value == names[index];
           return PrayerTimeCard(
             name: names[index],
             time: ctrl.prayerRanges[names[index]] ?? '',

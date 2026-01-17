@@ -14,29 +14,35 @@ abstract class AppIcons {
   static const isha = 'assets/images/isha_icon.svg';
 
   // ── Other Common Icons ─────────────────────────────────────────────────────
-  static const location = 'assets/icons/location_pin.svg';
-  static const qibla = 'assets/icons/qibla_compass.svg';
-  static const calendar = 'assets/icons/calendar.svg';
-  static const moon = 'assets/icons/moon.svg';
-  static const sun = 'assets/icons/sun.svg';
-  static const tasbihBeads = 'assets/icons/tasbih_beads.svg';
-  static const prohibited = 'assets/icons/prohibited_time.svg';
+  static const location = 'assets/images/location_pin.svg';
+  static const qibla = 'assets/images/qibla_compass.svg';
+  static const calendar = 'assets/images/calendar.svg';
+  static const moon = 'assets/images/moon.svg';
+  static const sun = 'assets/images/sun.svg';
+  static const tasbihBeads = 'assets/images/tasbih_beads.svg';
+  static const prohibited = 'assets/images/prohibited_time.svg';
 
   // ── Social & Support ───────────────────────────────────────────────────────
-  static const facebook = 'assets/icons/facebook.svg';
-  static const supportUs = 'assets/icons/support_us.svg';
+  static const facebook = 'assets/images/facebook.svg';
+  static const supportUs = 'assets/images/support_us.svg';
 
   // ── Splash & Logo ──────────────────────────────────────────────────────────
-  static const appLogo = 'assets/icons/app_logo.svg';
+  static const appLogo = 'assets/images/app_logo.svg';
   static const splashBackground = 'assets/images/splash_background.svg';
 
 // ── location ──────────────────────────────────────────────────────────
   static const locationPin = 'assets/images/location_pin.svg';
   static const donate = 'assets/images/donate.svg';
   static const boy = 'assets/images/boy.svg';
-// ── Add more icons here as your app grows ──────────────────────────────────
-// static const notification = 'assets/icons/notification.svg';
-// static const settings = 'assets/icons/settings.svg';
+  static const prayerTime = 'assets/images/prayer_time.svg';
+  static const quranIcon = 'assets/images/quran_icon.svg';
+  static const qiblaIcon = 'assets/images/qibla_icon.svg';
+  static const tasbihIcon = 'assets/images/tasbih_icon.svg';
+  static const calanderIcon = 'assets/images/calander_icon.svg';
+  static const record_prayer_bg = 'assets/images/record_your_prayer.svg';
+  static const qibla_finder_bg = 'assets/images/qibla_finder.svg';
+  static const tashbih_counter_bg = 'assets/images/tashbih_counter.svg';
+
 }
 //ex:
 // SvgPicture.asset(AppIcons.splashBackground,fit: BoxFit.cover,),

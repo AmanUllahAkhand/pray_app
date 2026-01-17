@@ -1,6 +1,6 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:pray_app/data/datasources/prayer_datasource.dart';
-import 'package:pray_app/data/models/prayer_time_model.dart';
+import 'package:pray_app/data/models/home/prayer_time_model.dart';
 import 'package:pray_app/domain/entities/prayer_time.dart';
 import 'package:pray_app/domain/repositories/prayer_repository.dart';
 

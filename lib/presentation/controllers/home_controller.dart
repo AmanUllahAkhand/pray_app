@@ -150,7 +150,7 @@ class HomeController extends GetxController {
   String formatPrayerRange(DateTime start, DateTime end) {
     final startTime = DateFormat('h:mm').format(start);
     final endTime = DateFormat('h:mm').format(end);
-    return "$startTime – $endTime";
+    return "$startTime–$endTime";
   }
 
 

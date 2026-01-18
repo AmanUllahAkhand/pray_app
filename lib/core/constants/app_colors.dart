@@ -9,3 +9,4 @@ const Color dragonBayColor = Color(0xFF5EAB9E);
 const Color tranquilColor = Color(0xFFDCEDE9);
 const Color moonlightJade = Color(0xFFC7E3DE);
 const Color gramsHair = Color(0xFFF3F8F7);
+const Color bashful = Color(0xFFE3EEEC);

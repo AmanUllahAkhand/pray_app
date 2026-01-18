@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:pray_app/core/constants/app_colors.dart';
 import '../controllers/quran_controller.dart';
 import '../widgets/custom_text.dart';
+import '../widgets/quranScreen/sura_count_badge.dart';
 
 class QuranScreen extends StatelessWidget {
   QuranScreen({super.key});
@@ -12,6 +14,7 @@ class QuranScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         title: const CustomText(
           text: 'Al-Quran',
@@ -47,8 +50,8 @@ class QuranScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: SvgPicture.asset(
-                'assets/svg/quran_banner.svg',
+              child: Image.asset(
+                'assets/images/quran_banner.png',
                 height: 160,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -86,18 +89,14 @@ class QuranScreen extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFEAF5F2),
+                        color: bashful,
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: Row(
                         children: [
                           /// Index
-                          CircleAvatar(
-                            backgroundColor: Colors.white,
-                            child: CustomText(
-                              text:sura.id.toString(),
-                              fontWeight: FontWeight.w600,
-                            ),
+                          SuraCountBadge(
+                            count: sura.id.toString(),
                           ),
                           const SizedBox(width: 12),
 
@@ -108,14 +107,14 @@ class QuranScreen extends StatelessWidget {
                               children: [
                                 CustomText(
                                   text:sura.nameEn,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
                                 ),
                                 const SizedBox(height: 4),
                                 CustomText(
                                   text:'Verses: ${sura.verses} | ${sura.type}',
                                   fontSize: 12,
-                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ],
                             ),

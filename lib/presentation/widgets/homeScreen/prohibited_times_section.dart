@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:pray_app/core/constants/app_colors.dart';
 import 'package:pray_app/presentation/controllers/home_controller.dart';
+import 'package:pray_app/presentation/widgets/custom_text.dart';
+
+import '../../../core/constants/app_icons.dart';
 
 class ProhibitedTimesSection extends StatelessWidget {
   const ProhibitedTimesSection({super.key});
@@ -10,7 +15,6 @@ class ProhibitedTimesSection extends StatelessWidget {
     final controller = Get.find<HomeController>();
 
     return Obx(() {
-      // If you didn't fetch prohibited times yet, show a minimal placeholder
       if (controller.prohibitedTimes.isEmpty) {
         return const SizedBox.shrink();
       }
@@ -18,43 +22,56 @@ class ProhibitedTimesSection extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Prohibited times for prayer",
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.black87,
-            ),
-          ),
-          const SizedBox(height: 12),
 
           Container(
-            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.red.shade50.withOpacity(0.6),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.red.shade200, width: 1),
+              borderRadius: BorderRadius.circular(16),
             ),
-            child: Column(
+            child: Stack(
               children: [
-                _buildProhibitedRow(
-                  title: "Dawn (Sunrise period)",
-                  time: controller.prohibitedTimes['Dawn'] ?? "05:00 am - 06:00 am",
-                  icon: Icons.wb_sunny_outlined,
+                /// Background SVG
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: SvgPicture.asset(
+                      AppIcons.mosqueBg,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-                const Divider(height: 24, color: Colors.redAccent),
 
-                _buildProhibitedRow(
-                  title: "Afternoon (Sun at zenith)",
-                  time: controller.prohibitedTimes['Afternoon'] ?? "12:00 pm - 01:00 pm",
-                  icon: Icons.wb_sunny,
-                ),
-                const Divider(height: 24, color: Colors.redAccent),
+                /// Content
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const CustomText(
+                        text: "Prohibited times for prayer",
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: primaryColor,
+                      ),
+                      SizedBox(height: 10),
+                      _row(
+                        title: "Dawn",
+                        time: "05:00 am - 06:00 am",
+                      ),
+                      const SizedBox(height: 12),
 
-                _buildProhibitedRow(
-                  title: "Evening (Sunset period)",
-                  time: controller.prohibitedTimes['Evening'] ?? "05:00 pm - 06:00 pm",
-                  icon: Icons.nights_stay_outlined,
+                      _row(
+                        title: "Afternoon",
+                        time: "12:00 pm - 01:00 pm",
+                      ),
+                      const SizedBox(height: 12),
+
+                      _row(
+                        title: "Evening",
+                        time: "05:00 pm - 06:00 pm",
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -64,37 +81,67 @@ class ProhibitedTimesSection extends StatelessWidget {
     });
   }
 
-  Widget _buildProhibitedRow({
+  Widget _row({
     required String title,
     required String time,
-    required IconData icon,
   }) {
+    // Example input: "05:00 am - 06:00 am"
+    final parts = time.split(' - ');
+
+    final start = parts[0].split(' ');
+    final end = parts[1].split(' ');
+
     return Row(
       children: [
-        Icon(
-          icon,
-          color: Colors.redAccent,
-          size: 26,
+        CustomText(
+          text: title,
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
         ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        const Spacer(),
+
+        RichText(
+          text: TextSpan(
+            style: const TextStyle(color: Colors.black),
             children: [
-              Text(
-                title,
+              // Start time
+              TextSpan(
+                text: '${start[0]} ',
                 style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black87,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Poppins',
                 ),
               ),
-              const SizedBox(height: 2),
-              Text(
-                time,
-                style: TextStyle(
+              TextSpan(
+                text: start[1],
+                style: const TextStyle(
+                  fontSize: 8,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Poppins',
+                ),
+              ),
+
+              const TextSpan(
+                text: ' - ',
+                style: TextStyle(fontSize: 14),
+              ),
+
+              // End time
+              TextSpan(
+                text: '${end[0]} ',
+                style: const TextStyle(
                   fontSize: 14,
-                  color: Colors.grey[800],
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Poppins',
+                ),
+              ),
+              TextSpan(
+                text: end[1],
+                style: const TextStyle(
+                  fontSize: 8,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Poppins',
                 ),
               ),
             ],

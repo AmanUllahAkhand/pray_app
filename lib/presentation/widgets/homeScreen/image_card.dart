@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pray_app/core/constants/app_colors.dart';
+import 'package:pray_app/presentation/widgets/custom_text.dart';
 
 import '../../../core/constants/app_icons.dart';
 
@@ -9,7 +11,7 @@ class ImageFeatureCardsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
-    final double cardWidth = (screenWidth / 2) - 24;
+    final double cardWidth = (screenWidth / 2) - 22;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -90,7 +92,7 @@ class SvgFeatureCard extends StatelessWidget {
                 svgPath,
                 width: double.infinity,
                 height: double.infinity,
-                fit: BoxFit.cover,
+                fit: BoxFit.fill,
               ),
             ),
 
@@ -100,13 +102,11 @@ class SvgFeatureCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                  CustomText(
+                    text: title,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: backgroundColor,
                   ),
                   const Spacer(),
                   Container(
@@ -119,11 +119,14 @@ class SvgFeatureCard extends StatelessWidget {
                     child: const Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          "Go",
-                          style: TextStyle(color: Colors.white),
+
+                        CustomText(
+                          text:  "Go",
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: backgroundColor,
                         ),
-                        SizedBox(width: 6),
+                        SizedBox(width: 4),
                         Icon(Icons.arrow_forward_ios,
                             size: 10, color: Colors.white),
                       ],

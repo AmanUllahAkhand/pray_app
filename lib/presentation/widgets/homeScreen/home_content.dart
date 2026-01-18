@@ -201,27 +201,9 @@ class HomeContent extends StatelessWidget {
                 children: [
                   // Feature Buttons
                   const FeatureButtonGrid(),
-                  const SizedBox(height: 20),
+                  // ImageFeatureCardsSection
                   const ImageFeatureCardsSection(),
-
-                  // Ads Section
-                  Container(
-                    height: 50,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const CustomText(
-                      text: "Ads Section",
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black,
-                    ),
-                  ),
-
                   const SizedBox(height: 20),
-
                   // Prohibited Times
                   const ProhibitedTimesSection(),
                 ],

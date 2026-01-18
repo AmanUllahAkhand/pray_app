@@ -42,6 +42,7 @@ abstract class AppIcons {
   static const record_prayer_bg = 'assets/images/record_your_prayer.svg';
   static const qibla_finder_bg = 'assets/images/qibla_finder.svg';
   static const tashbih_counter_bg = 'assets/images/tashbih_counter.svg';
+  static const mosqueBg = 'assets/images/mosqueBg.svg';
 
 }
 //ex:

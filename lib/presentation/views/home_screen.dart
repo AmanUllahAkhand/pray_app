@@ -40,7 +40,7 @@ class HomeScreen extends GetView<HomeController> {
                       case 1:
                         return const PrayerScreen();
                       case 2:
-                        return const QuranScreen();
+                        return QuranScreen();
                       case 3:
                         return const TasbihScreen();
                       case 4:

@@ -50,6 +50,7 @@ abstract class AppIcons {
   static const ishaBg = 'assets/images/Isha_bg.svg';
   static const checkbox_icon = 'assets/images/checkbox_icon.svg';
   static const roundbox_icon = 'assets/images/roundbox_icon.svg';
+  static const quote_icon = 'assets/images/quote_icon.svg';
 }
 //ex:
 // SvgPicture.asset(AppIcons.splashBackground,fit: BoxFit.cover,),

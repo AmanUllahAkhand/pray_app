@@ -6,6 +6,7 @@ import 'package:pray_app/presentation/widgets/custom_text.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_icons.dart';
 import '../widgets/custom_switch.dart';
+import '../widgets/prayerScreen/daily_hadith.dart';
 
 class PrayerScreen extends GetView<PrayerController> {
   const PrayerScreen({super.key});
@@ -233,10 +234,6 @@ class PrayerScreen extends GetView<PrayerController> {
                             // Time + "Now"
                             Row(
                               children: [
-                                CustomText(
-                                  text: prayer.time,
-                                  color: isNow ? Colors.white : Colors.black,
-                                ),
                                 if (isNow) ...[
                                   const SizedBox(width: 6),
                                   Container(
@@ -252,6 +249,11 @@ class PrayerScreen extends GetView<PrayerController> {
                                     ),
                                   ),
                                 ],
+                                const SizedBox(width: 5,),
+                                CustomText(
+                                  text: prayer.time,
+                                  color: isNow ? Colors.white : Colors.black,
+                                ),
                               ],
                             ),
 
@@ -275,7 +277,10 @@ class PrayerScreen extends GetView<PrayerController> {
                     }),
                   );
                 },
-              )
+              ),
+              const SizedBox(height: 20,),
+              //DAILY HADITH
+              const DailyHadithSection()
 
             ],
           ),

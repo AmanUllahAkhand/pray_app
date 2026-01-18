@@ -47,34 +47,34 @@ class TasbihScreen extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              controller.count.value.toString(),
-                              style: const TextStyle(
-                                fontSize: 42,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
+                            CustomText(
+                              text: controller.count.value.toString(),
+                              fontSize: 42,
+                              fontWeight: FontWeight.w700,
+                              color: backgroundColor,
                             ),
+
                             const SizedBox(height: 8),
-                            Text(
-                              controller.duas[controller.currentIndex.value]['ar']!,
-                              style: const TextStyle(
-                                fontSize: 26,
-                                color: Colors.white,
-                              ),
+                            CustomText(
+                              text: controller.duas[controller.currentIndex.value]['ar']!,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w400,
+                              color: backgroundColor,
                             ),
+
                             const SizedBox(height: 6),
-                            Text(
-                              controller.duas[controller.currentIndex.value]['en']!,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.white70,
-                              ),
+                            CustomText(
+                              text: controller.duas[controller.currentIndex.value]['en']!,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: backgroundColor,
                             ),
                             const SizedBox(height: 8),
-                            Text(
-                              '${controller.currentIndex.value + 1}/12',
-                              style: const TextStyle(color: Colors.white70),
+                            CustomText(
+                              text:  '${controller.currentIndex.value + 1}/12',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: backgroundColor,
                             ),
                           ],
                         ),

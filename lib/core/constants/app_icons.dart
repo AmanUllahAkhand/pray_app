@@ -54,6 +54,15 @@ abstract class AppIcons {
   static const suraCount = 'assets/images/sura_count.svg';
   static const tasbihCountBtn = 'assets/images/tasbihCountBtn.svg';
   static const tasbish_bgi = 'assets/images/tasbish_bgi.svg';
+  static const more_bgi = 'assets/images/more_bgi.svg';
+  static const donateIcon = 'assets/images/donateIcon.svg';
+  static const about = 'assets/images/about.svg';
+  static const faq = 'assets/images/faq.svg';
+  static const language = 'assets/images/language.svg';
+  static const privacy = 'assets/images/privacy.svg';
+  static const rate = 'assets/images/rate.svg';
+  static const share = 'assets/images/share.svg';
+  static const donateimage = 'assets/images/donateimage.svg';
 }
 //ex:
 // SvgPicture.asset(AppIcons.splashBackground,fit: BoxFit.cover,),

@@ -44,7 +44,7 @@ class HomeScreen extends GetView<HomeController> {
                       case 3:
                         return TasbihScreen();
                       case 4:
-                        return const MoreScreen();
+                        return MoreScreen();
                       default:
                         return const HomeContent();
                     }

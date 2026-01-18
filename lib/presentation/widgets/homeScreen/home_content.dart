@@ -196,16 +196,16 @@ class HomeContent extends StatelessWidget {
               ),
               padding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Feature Buttons
-                  const FeatureButtonGrid(),
+                  FeatureButtonGrid(),
                   // ImageFeatureCardsSection
-                  const ImageFeatureCardsSection(),
-                  const SizedBox(height: 20),
+                  ImageFeatureCardsSection(),
+                  SizedBox(height: 20),
                   // Prohibited Times
-                  const ProhibitedTimesSection(),
+                  ProhibitedTimesSection(),
                 ],
               ),
             ),

@@ -43,7 +43,11 @@ abstract class AppIcons {
   static const qibla_finder_bg = 'assets/images/qibla_finder.svg';
   static const tashbih_counter_bg = 'assets/images/tashbih_counter.svg';
   static const mosqueBg = 'assets/images/mosqueBg.svg';
-
+  static const fajrBg = 'assets/images/Fajr_bg.svg';
+  static const dhuhrBg = 'assets/images/Dhuhr_bg.svg';
+  static const asrBg = 'assets/images/Asr_bg.svg';
+  static const maghribBg = 'assets/images/Maghrib_bg.svg';
+  static const ishaBg = 'assets/images/Isha_bg.svg';
 }
 //ex:
 // SvgPicture.asset(AppIcons.splashBackground,fit: BoxFit.cover,),

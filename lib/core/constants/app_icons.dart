@@ -52,6 +52,7 @@ abstract class AppIcons {
   static const roundbox_icon = 'assets/images/roundbox_icon.svg';
   static const quote_icon = 'assets/images/quote_icon.svg';
   static const suraCount = 'assets/images/sura_count.svg';
+  static const tasbihCountBtn = 'assets/images/tasbihCountBtn.svg';
 }
 //ex:
 // SvgPicture.asset(AppIcons.splashBackground,fit: BoxFit.cover,),

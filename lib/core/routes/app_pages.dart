@@ -9,6 +9,7 @@ import 'package:pray_app/presentation/views/splash_screen.dart';
 import 'package:pray_app/presentation/views/tasbih_screen.dart';
 import '../../presentation/bindings/prayer_binding.dart';
 import '../../presentation/bindings/quran_binding.dart';
+import '../../presentation/bindings/tasbhi_binding.dart';
 
 class AppPages {
   static const initial = AppRoutes.splash;
@@ -35,7 +36,8 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.tasbih,
-      page: () => const TasbihScreen(),
+      page: () =>  TasbihScreen(),
+      binding: TasbihBinding(),
     ),
     GetPage(
       name: AppRoutes.more,

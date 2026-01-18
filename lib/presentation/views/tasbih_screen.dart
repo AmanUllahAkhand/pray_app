@@ -1,14 +1,131 @@
 import 'package:flutter/material.dart';
-import 'package:pray_app/presentation/widgets/custom_text.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:pray_app/core/constants/app_colors.dart';
+import '../../core/constants/app_icons.dart';
+import '../controllers/tasbih_controller.dart';
+import '../widgets/custom_text.dart';
 
 class TasbihScreen extends StatelessWidget {
-  const TasbihScreen({super.key});
+  TasbihScreen({super.key});
 
+  final TasbihController controller = Get.put(TasbihController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const CustomText(text: 'Tasbih Counter')),
-      body: const Center(child: CustomText(text: 'Tasbih counter feature here')),
+      backgroundColor: backgroundColor,
+      appBar: AppBar(
+        title: const Text('Tasbih'),
+        centerTitle: true,
+        leading: const BackButton(),
+      ),
+      body: Column(
+        children: [
+          /// 🔝 TOP CARD
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Obx(
+                  () => Container(
+                height: 190,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: Colors.transparent, // fallback color
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(18),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      /// 🔹 SVG BACKGROUND
+                      SvgPicture.asset(
+                        AppIcons.splashBackground, // your SVG path
+                        fit: BoxFit.cover,
+                      ),
+
+                      /// 🔹 CENTER CONTENT
+                      Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              controller.count.value.toString(),
+                              style: const TextStyle(
+                                fontSize: 42,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              controller.duas[controller.currentIndex.value]['ar']!,
+                              style: const TextStyle(
+                                fontSize: 26,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              controller.duas[controller.currentIndex.value]['en']!,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.white70,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              '${controller.currentIndex.value + 1}/12',
+                              style: const TextStyle(color: Colors.white70),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      /// ◀ ▶ Buttons
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          icon: const Icon(Icons.chevron_left, color: Colors.white),
+                          onPressed: controller.previousDua,
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: IconButton(
+                          icon: const Icon(Icons.chevron_right, color: Colors.white),
+                          onPressed: controller.nextDua,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          /// 🔄 RESET BUTTON
+          ElevatedButton(
+            onPressed: controller.reset,
+            child: const CustomText(
+              text: "Reset",
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: backgroundColor,
+            )
+          ),
+
+          const Spacer(),
+
+          /// ➕ PLUS BUTTON (SVG)
+          GestureDetector(
+            onTap: controller.increment,
+            child: SvgPicture.asset(
+              AppIcons.tasbihCountBtn,
+              width: 200,
+            ),
+          ),
+          SizedBox(height: 30,)
+        ],
+      ),
     );
   }
 }

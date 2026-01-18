@@ -38,7 +38,7 @@ class TasbihScreen extends StatelessWidget {
                     children: [
                       /// 🔹 SVG BACKGROUND
                       SvgPicture.asset(
-                        AppIcons.splashBackground, // your SVG path
+                        AppIcons.tasbish_bgi, // your SVG path
                         fit: BoxFit.cover,
                       ),
 

@@ -53,6 +53,7 @@ abstract class AppIcons {
   static const quote_icon = 'assets/images/quote_icon.svg';
   static const suraCount = 'assets/images/sura_count.svg';
   static const tasbihCountBtn = 'assets/images/tasbihCountBtn.svg';
+  static const tasbish_bgi = 'assets/images/tasbish_bgi.svg';
 }
 //ex:
 // SvgPicture.asset(AppIcons.splashBackground,fit: BoxFit.cover,),

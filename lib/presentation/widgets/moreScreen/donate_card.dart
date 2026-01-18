@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:pray_app/core/constants/app_colors.dart';
-
 import '../../../core/constants/app_icons.dart';
 import '../../controllers/more_controller.dart';
 import '../custom_text.dart';
@@ -46,7 +45,7 @@ class DonateCard extends GetView<MoreController> {
                     color: backgroundColor,
                   ),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(height: 15),
                 Center(
                   child: ElevatedButton(
                     onPressed: controller.onDonateTap,

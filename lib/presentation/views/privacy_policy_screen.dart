@@ -4,7 +4,6 @@ import 'package:pray_app/core/constants/app_colors.dart';
 import '../controllers/privacy_policy_controller.dart';
 import '../widgets/custom_text.dart';
 
-
 class PrivacyPolicyScreen extends GetView<PrivacyPolicyController> {
   const PrivacyPolicyScreen({super.key});
 

@@ -63,6 +63,12 @@ abstract class AppIcons {
   static const rate = 'assets/images/rate.svg';
   static const share = 'assets/images/share.svg';
   static const donateimage = 'assets/images/donateimage.svg';
+  static const bkash = 'assets/images/bkash.svg';
+  static const nagad = 'assets/images/ngd.svg';
+  static const wise = 'assets/images/wise.svg';
+  static const copyIcon = 'assets/images/copyIcon.svg';
+  static const banLan = 'assets/images/banLan.svg';
+  static const engLan = 'assets/images/engLan.svg';
 }
 //ex:
 // SvgPicture.asset(AppIcons.splashBackground,fit: BoxFit.cover,),

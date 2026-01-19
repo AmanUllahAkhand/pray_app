@@ -7,10 +7,14 @@ import 'package:pray_app/presentation/views/prayer_screen.dart';
 import 'package:pray_app/presentation/views/quran_screen.dart';
 import 'package:pray_app/presentation/views/splash_screen.dart';
 import 'package:pray_app/presentation/views/tasbih_screen.dart';
+import '../../presentation/bindings/language_binding.dart';
 import '../../presentation/bindings/more_binding.dart';
 import '../../presentation/bindings/prayer_binding.dart';
 import '../../presentation/bindings/quran_binding.dart';
+import '../../presentation/bindings/support_binding.dart';
 import '../../presentation/bindings/tasbhi_binding.dart';
+import '../../presentation/views/language_screen.dart';
+import '../../presentation/views/support_screen.dart';
 
 class AppPages {
   static const initial = AppRoutes.splash;
@@ -44,6 +48,16 @@ class AppPages {
       name: AppRoutes.more,
       page: () => MoreScreen(),
       binding: MoreBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.support,
+      page: () => const SupportScreen(),
+      binding: SupportBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.language,
+      page: () => const LanguageScreen(),
+      binding: LanguageBinding(),
     ),
   ];
 }

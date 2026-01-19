@@ -8,5 +8,5 @@ class AppRoutes {
   static const support = '/support';
   static const language = '/language';
   static const aboutQalam = '/AboutQalam';
-  // static const language = '/language';
+  static const privacyPolicy = '/PrivacyPolicy';
 }

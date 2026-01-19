@@ -11,11 +11,13 @@ import '../../presentation/bindings/about_qalam_binding.dart';
 import '../../presentation/bindings/language_binding.dart';
 import '../../presentation/bindings/more_binding.dart';
 import '../../presentation/bindings/prayer_binding.dart';
+import '../../presentation/bindings/privacy_policy_binding.dart';
 import '../../presentation/bindings/quran_binding.dart';
 import '../../presentation/bindings/support_binding.dart';
 import '../../presentation/bindings/tasbhi_binding.dart';
 import '../../presentation/views/about_qalam_screen.dart';
 import '../../presentation/views/language_screen.dart';
+import '../../presentation/views/privacy_policy_screen.dart';
 import '../../presentation/views/support_screen.dart';
 
 class AppPages {
@@ -66,10 +68,10 @@ class AppPages {
       page: () => const AboutQalamScreen(),
       binding: AboutQalamBinding(),
     ),
-    // GetPage(
-    //   name: AppRoutes.language,
-    //   page: () => const LanguageScreen(),
-    //   binding: LanguageBinding(),
-    // ),
+    GetPage(
+      name: AppRoutes.privacyPolicy,
+      page: () => const PrivacyPolicyScreen(),
+      binding: PrivacyPolicyBinding(),
+    ),
   ];
 }

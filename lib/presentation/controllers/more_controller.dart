@@ -10,7 +10,7 @@ class MoreController extends GetxController {
   }
   void onFaqTap() {}
   void onAboutTap() {Get.toNamed(AppRoutes.aboutQalam);}
-  void onPrivacyTap() {}
+  void onPrivacyTap() {Get.toNamed(AppRoutes.privacyPolicy);}
   void onRateTap() {}
   void onShareTap() {}
 }

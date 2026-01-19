@@ -6,7 +6,6 @@ import '../../core/constants/app_icons.dart';
 import '../controllers/about_qalam_controller.dart';
 import '../widgets/custom_text.dart';
 
-
 class AboutQalamScreen extends GetView<AboutQalamController> {
   const AboutQalamScreen({super.key});
 
@@ -74,7 +73,7 @@ class AboutQalamScreen extends GetView<AboutQalamController> {
         Container(
           height: 3,
           width: 120,
-          color: Colors.teal,
+          color: primaryColor,
         ),
       ],
     );

@@ -9,4 +9,5 @@ class AppRoutes {
   static const language = '/language';
   static const aboutQalam = '/AboutQalam';
   static const privacyPolicy = '/PrivacyPolicy';
+  static const calendar = '/Calendar';
 }

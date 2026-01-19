@@ -8,6 +8,7 @@ import 'package:pray_app/presentation/views/quran_screen.dart';
 import 'package:pray_app/presentation/views/splash_screen.dart';
 import 'package:pray_app/presentation/views/tasbih_screen.dart';
 import '../../presentation/bindings/about_qalam_binding.dart';
+import '../../presentation/bindings/calendar_binding.dart';
 import '../../presentation/bindings/language_binding.dart';
 import '../../presentation/bindings/more_binding.dart';
 import '../../presentation/bindings/prayer_binding.dart';
@@ -16,6 +17,7 @@ import '../../presentation/bindings/quran_binding.dart';
 import '../../presentation/bindings/support_binding.dart';
 import '../../presentation/bindings/tasbhi_binding.dart';
 import '../../presentation/views/about_qalam_screen.dart';
+import '../../presentation/views/calendar_screen.dart';
 import '../../presentation/views/language_screen.dart';
 import '../../presentation/views/privacy_policy_screen.dart';
 import '../../presentation/views/support_screen.dart';
@@ -72,6 +74,11 @@ class AppPages {
       name: AppRoutes.privacyPolicy,
       page: () => const PrivacyPolicyScreen(),
       binding: PrivacyPolicyBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.calendar,
+      page: () => const CalendarScreen(),
+      binding: CalendarBinding(),
     ),
   ];
 }

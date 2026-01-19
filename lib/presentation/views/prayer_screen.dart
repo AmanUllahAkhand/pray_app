@@ -17,9 +17,8 @@ class PrayerScreen extends GetView<PrayerController> {
 
     return Obx(
           () => Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: backgroundColor,
         appBar: AppBar(
-          backgroundColor: controller.appBarColor.value,
           title: const CustomText(
             text: 'Prayer Time',
             fontSize: 18,

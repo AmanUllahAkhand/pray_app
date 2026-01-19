@@ -7,4 +7,6 @@ class AppRoutes {
   static const more = '/more';
   static const support = '/support';
   static const language = '/language';
+  static const aboutQalam = '/AboutQalam';
+  // static const language = '/language';
 }

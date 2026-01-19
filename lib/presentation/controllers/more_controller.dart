@@ -9,7 +9,7 @@ class MoreController extends GetxController {
     Get.toNamed(AppRoutes.language);
   }
   void onFaqTap() {}
-  void onAboutTap() {}
+  void onAboutTap() {Get.toNamed(AppRoutes.aboutQalam);}
   void onPrivacyTap() {}
   void onRateTap() {}
   void onShareTap() {}

@@ -16,12 +16,11 @@ class LanguageScreen extends GetView<LanguageController> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: const Center(
-          child: CustomText(
-            text: 'Choose preferred language',
-            fontWeight: FontWeight.w500,
-            fontSize: 16,
-          ),
+        centerTitle: true,
+        title: CustomText(
+          text: 'Choose preferred language',
+          fontWeight: FontWeight.w500,
+          fontSize: 16,
         ),
       ),
       body: Padding(

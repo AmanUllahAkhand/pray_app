@@ -70,6 +70,7 @@ abstract class AppIcons {
   static const banLan = 'assets/images/banLan.svg';
   static const engLan = 'assets/images/engLan.svg';
   static const filter = 'assets/images/filter.svg';
+  static const splashLogo = 'assets/images/splogo.svg';
 }
 //ex:
 // SvgPicture.asset(AppIcons.splashBackground,fit: BoxFit.cover,),

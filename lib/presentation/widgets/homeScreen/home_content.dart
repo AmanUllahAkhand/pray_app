@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:pray_app/presentation/widgets/homeScreen/prayer_time_card.dart';
 import 'package:pray_app/presentation/widgets/homeScreen/prohibited_times_section.dart';
-
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_icons.dart';
 import '../../controllers/home_controller.dart';
@@ -48,12 +47,14 @@ class HomeContent extends StatelessWidget {
                             height: 24,
                           ),
                           const SizedBox(width: 8),
-                          const CustomText(
-                            text: "Dhaka, Bangladesh",
+                          Obx(() => CustomText(
+                            text: ctrl.cityName.value.isNotEmpty
+                                ? "${ctrl.cityName.value}, ${ctrl.countryName.value}"
+                                : "Detecting location...",
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                             color: backgroundColor,
-                          ),
+                          )),
                         ],
                       ),
                       ElevatedButton(

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pray_app/domain/entities/prayer_time.dart';
@@ -23,15 +24,11 @@ class HomeController extends GetxController {
   // Navigation
   final selectedIndex = 0.obs;
   final currentTime = ''.obs;
+  final cityName = ''.obs;
+  final countryName = ''.obs;
+
 
   Timer? _timer;
-
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   fetchPrayerTimes();
-  //   _startCountdownTimer();
-  // }
 
   @override
   void onInit() {
@@ -41,12 +38,14 @@ class HomeController extends GetxController {
 
     ever(locationCtrl.currentPosition, (pos) {
       if (pos != null) {
+        setLocationFromLatLng(pos.latitude, pos.longitude);
         fetchPrayerTimes();
       }
     });
 
     _startCountdownTimer();
   }
+
 
 
   @override
@@ -62,6 +61,9 @@ class HomeController extends GetxController {
   Future<void> fetchPrayerTimes() async {
     final position = Get.find<LocationController>().currentPosition.value;
     if (position == null) return;
+
+    print("Latitude: ${position.latitude}");
+    print("Longitude: ${position.longitude}");
 
     try {
       final date = DateTime.now();
@@ -199,4 +201,20 @@ class HomeController extends GetxController {
   void _updateCurrentTime() {
     currentTime.value = DateFormat('hh:mm a').format(DateTime.now());
   }
+
+  Future<void> setLocationFromLatLng(double lat, double lng) async {
+    try {
+      final placemarks = await placemarkFromCoordinates(lat, lng);
+
+      if (placemarks.isNotEmpty) {
+        final place = placemarks.first;
+
+        cityName.value = place.locality ?? '';
+        countryName.value = place.country ?? '';
+      }
+    } catch (e) {
+      print("Location name error: $e");
+    }
+  }
+
 }

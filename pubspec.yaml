@@ -21,6 +21,7 @@ dependencies:
   hijri: ^3.0.0  # For Hijri date calculations (complements adhan)
   intl: ^0.19.0  # For date and time formatting
   table_calendar: ^3.0.9
+  geocoding: ^4.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

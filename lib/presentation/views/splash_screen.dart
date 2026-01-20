@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Stack(
         alignment: Alignment.center,
         children: [
-          // Background SVG
+          // 🔹 Background SVG
           SvgPicture.asset(
             AppIcons.splashBackground,
             fit: BoxFit.cover,
@@ -37,12 +37,23 @@ class _SplashScreenState extends State<SplashScreen> {
             height: double.infinity,
           ),
 
-          // App Name Text
-          const CustomText(
-            text: 'Pray App',
-            fontSize: 28,
-            fontWeight: FontWeight.w600,
-            color: backgroundColor,
+          // 🔹 Logo + App Name
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SvgPicture.asset(
+                AppIcons.splashLogo,
+                width: 140,
+                height: 140,
+              ),
+              const SizedBox(height: 16),
+              const CustomText(
+                text: 'Pray App',
+                fontSize: 28,
+                fontWeight: FontWeight.w600,
+                color: backgroundColor,
+              ),
+            ],
           ),
         ],
       ),

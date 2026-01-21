@@ -63,39 +63,26 @@ class QiblaScreen extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
+        // Compass background stays centered
         Transform.rotate(
           angle: -direction.direction * (pi / 180),
           child: SvgPicture.asset(
             AppIcons.compass,
           ),
         ),
+
         Transform.rotate(
           angle: -direction.qiblah * (pi / 180),
-          child: SvgPicture.asset(
-            AppIcons.qiblaNeedle,
-          ),
-        ),
-        Positioned(
-          top: 16, // adjust distance from top as needed
-          left: 0,
-          right: 0,
-          child: Transform.rotate(
-            angle: -direction.qiblah * (pi / 180),
-            alignment: Alignment.center,
+          child: Transform.translate(
+            offset: const Offset(0, -170), // move up by 40 pixels
             child: SvgPicture.asset(
               AppIcons.qiblaNeedle,
             ),
           ),
         ),
-        Positioned(
-          bottom: 16,
-          child: Text(
-            "${direction.offset.toStringAsFixed(2)}°",
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-        ),
       ],
     );
   }
+
 }
 

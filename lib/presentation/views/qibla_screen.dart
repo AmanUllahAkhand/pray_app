@@ -74,7 +74,7 @@ class QiblaScreen extends StatelessWidget {
         Transform.rotate(
           angle: -direction.qiblah * (pi / 180),
           child: Transform.translate(
-            offset: const Offset(0, -170), // move up by 40 pixels
+            offset: const Offset(-15, -170), // move up by 40 pixels
             child: SvgPicture.asset(
               AppIcons.qiblaNeedle,
             ),

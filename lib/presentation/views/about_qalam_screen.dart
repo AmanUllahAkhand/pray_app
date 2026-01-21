@@ -24,7 +24,7 @@ class AboutQalamScreen extends GetView<AboutQalamController> {
           children: [
             /// Logo
             SvgPicture.asset(
-              AppIcons.appLogo,
+              AppIcons.colorLogo,
               height: 90,
             ),
 

@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   get: ^4.6.6  # For GetX state management and navigation
-  geolocator: ^10.1.0  # For location handling
+  geolocator: ^13.0.4  # For location handling
   permission_handler: ^12.0.1  # For handling permissions
   adhan: ^2.0.0+1  # For prayer time calculations (offline support)
   flutter_svg: ^2.0.17  # For SVG support
@@ -22,6 +22,13 @@ dependencies:
   intl: ^0.19.0  # For date and time formatting
   table_calendar: ^3.0.9
   geocoding: ^4.0.0
+  flutter_qiblah: ^3.1.0+1
+  google_maps_flutter: ^2.5.0
+  location: ^5.0.3
+#  flutter_compass: ^0.8.0
+  shimmer: ^3.0.0
+  cupertino_icons: ^1.0.1
+  dynamic_color: ^1.7.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

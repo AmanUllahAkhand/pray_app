@@ -13,6 +13,7 @@ import '../../presentation/bindings/language_binding.dart';
 import '../../presentation/bindings/more_binding.dart';
 import '../../presentation/bindings/prayer_binding.dart';
 import '../../presentation/bindings/privacy_policy_binding.dart';
+import '../../presentation/bindings/qibla_binding.dart';
 import '../../presentation/bindings/quran_binding.dart';
 import '../../presentation/bindings/support_binding.dart';
 import '../../presentation/bindings/tasbhi_binding.dart';
@@ -20,6 +21,7 @@ import '../../presentation/views/about_qalam_screen.dart';
 import '../../presentation/views/calendar_screen.dart';
 import '../../presentation/views/language_screen.dart';
 import '../../presentation/views/privacy_policy_screen.dart';
+import '../../presentation/views/qibla_screen.dart';
 import '../../presentation/views/support_screen.dart';
 
 class AppPages {
@@ -79,6 +81,11 @@ class AppPages {
       name: AppRoutes.calendar,
       page: () => const CalendarScreen(),
       binding: CalendarBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.qibla,
+      page: () => QiblaScreen(),
+      binding: QiblaBinding(),
     ),
   ];
 }

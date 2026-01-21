@@ -105,6 +105,7 @@ class HomeContent extends StatelessWidget {
                     children: [
                       // Left
                       Expanded(
+                        flex: 3,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -136,7 +137,7 @@ class HomeContent extends StatelessWidget {
                                   CustomText(
                                     text:
                                     parts.isNotEmpty ? parts[0] : '',
-                                    fontSize: 40,
+                                    fontSize: 36,
                                     fontWeight: FontWeight.w700,
                                     color: backgroundColor,
                                   ),
@@ -144,14 +145,14 @@ class HomeContent extends StatelessWidget {
                                   CustomText(
                                     text:
                                     parts.length > 1 ? parts[1] : '',
-                                    fontSize: 28,
+                                    fontSize: 26,
                                     fontWeight: FontWeight.w400,
                                     color: backgroundColor,
                                   ),
                                   const SizedBox(width: 5),
                                   const CustomText(
                                     text: "(Start Time)",
-                                    fontSize: 14,
+                                    fontSize: 13,
                                     fontWeight: FontWeight.w400,
                                     color: backgroundColor,
                                   ),
@@ -172,15 +173,14 @@ class HomeContent extends StatelessWidget {
                         ),
                       ),
 
-                      SvgPicture.asset(AppIcons.boy),
+                      Expanded(
+                          flex: 2,
+                          child: SvgPicture.asset(AppIcons.boy)
+                      ),
                     ],
                   ),
-
-                  const SizedBox(height: 16),
-
                   // Prayer Times Card
                   _buildPrayerTimesRow(ctrl),
-
                 ],
               ),
             ),

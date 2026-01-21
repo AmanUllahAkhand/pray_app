@@ -10,4 +10,5 @@ class AppRoutes {
   static const aboutQalam = '/AboutQalam';
   static const privacyPolicy = '/PrivacyPolicy';
   static const calendar = '/Calendar';
+  static const qibla = '/qibla';
 }

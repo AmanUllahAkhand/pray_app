@@ -71,6 +71,10 @@ abstract class AppIcons {
   static const engLan = 'assets/images/engLan.svg';
   static const filter = 'assets/images/filter.svg';
   static const splashLogo = 'assets/images/splogo.svg';
+  static const colorLogo = 'assets/images/colorLogo.svg';
+  static const gpsIcon = 'assets/images/gps.svg';
+  static const compassCircle = 'assets/images/compass_circle.svg';
+  static const qiblaIconLoc = 'assets/images/qibla_icon_loc.svg';
 }
 //ex:
 // SvgPicture.asset(AppIcons.splashBackground,fit: BoxFit.cover,),

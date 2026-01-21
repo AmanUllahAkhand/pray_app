@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:pray_app/core/constants/app_colors.dart';
 import 'package:pray_app/presentation/widgets/custom_text.dart';
 
 import '../../../core/constants/app_icons.dart';
+import '../../../core/routes/app_routes.dart';
 
 class ImageFeatureCardsSection extends StatelessWidget {
   const ImageFeatureCardsSection({super.key});
@@ -37,7 +40,7 @@ class ImageFeatureCardsSection extends StatelessWidget {
               child: SvgFeatureCard(
                 title: "Qibla Finder",
                 svgPath: AppIcons.qibla_finder_bg,
-                onTap: () {},
+                onTap: () {Get.toNamed(AppRoutes.qibla);},
               ),
             ),
 

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 class QiblaController extends GetxController {
   final locationStatus = Rxn<LocationStatus>();
   final qiblahDirection = Rxn<QiblahDirection>();
+  final RxBool hasSensor = true.obs;
 
   StreamSubscription<QiblahDirection>? _qiblahStream;
 
@@ -13,6 +14,7 @@ class QiblaController extends GetxController {
   void onInit() {
     super.onInit();
     _checkLocationStatus();
+    _checkSensor();
   }
 
   Future<void> _checkLocationStatus() async {
@@ -32,6 +34,11 @@ class QiblaController extends GetxController {
         qiblahDirection.value = direction;
       });
     }
+  }
+
+  Future<void> _checkSensor() async {
+    final available = await FlutterQiblah.androidDeviceSensorSupport();
+    hasSensor.value = available!;
   }
 
   @override

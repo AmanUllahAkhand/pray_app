@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:pray_app/core/constants/app_colors.dart';
+import 'package:pray_app/presentation/widgets/custom_text.dart';
 import '../../core/constants/app_icons.dart';
 import '../controllers/qibla_controller.dart';
 import '../widgets/qiblaScreen/location_error_widget.dart';
@@ -36,6 +37,29 @@ class QiblaScreen extends StatelessWidget {
           // Main content (centered)
           Center(
             child: Obx(() {
+              // 🚫 No sensor case
+              if (!controller.hasSensor.value) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Transform.translate(
+                      offset: const Offset(0, -120), // move up by 20px
+                      child: SvgPicture.asset(
+                        AppIcons.compass,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const CustomText(
+                      text: "Your device does not support compass sensor",
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                );
+              }
+
+
               final status = controller.locationStatus.value;
 
               if (status == null) {
@@ -55,25 +79,26 @@ class QiblaScreen extends StatelessWidget {
                     error: "Location permission denied",
                     callback: controller.retry,
                   );
+
                 case LocationPermission.deniedForever:
                   return LocationErrorWidget(
                     error: "Location permission denied forever",
                     callback: controller.retry,
                   );
+
                 case LocationPermission.always:
                 case LocationPermission.whileInUse:
                   final direction = controller.qiblahDirection.value;
                   if (direction == null) {
                     return const CircularProgressIndicator();
                   }
-                  return Center(
-                  child: Transform.translate(
-                  offset: const Offset(0, -80), // move up by 20 pixels
-              child: _buildCompass(direction),
-              ),
-              );
 
-              default:
+                  return Transform.translate(
+                    offset: const Offset(0, -80),
+                    child: _buildCompass(direction),
+                  );
+
+                default:
                   return Container();
               }
             }),
@@ -85,29 +110,49 @@ class QiblaScreen extends StatelessWidget {
 
 
   Widget _buildCompass(QiblahDirection direction) {
-    return Stack(
-      alignment: Alignment.center,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        // Compass background stays centered
-        Transform.rotate(
-          angle: -direction.direction * (pi / 180),
-          child: SvgPicture.asset(
-            AppIcons.compass,
-          ),
+        // 🔵 Compass area
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            // Compass background
+            Transform.rotate(
+              angle: -direction.direction * (pi / 180),
+              child: SvgPicture.asset(
+                AppIcons.compass,
+              ),
+            ),
+
+            // Qibla needle
+            Transform.rotate(
+              angle: -direction.qiblah * (pi / 180),
+              child: Transform.translate(
+                offset: const Offset(-15, -170),
+                child: SvgPicture.asset(
+                  AppIcons.qiblaNeedle,
+                ),
+              ),
+            ),
+          ],
         ),
 
-        Transform.rotate(
-          angle: -direction.qiblah * (pi / 180),
-          child: Transform.translate(
-            offset: const Offset(-15, -170), // move up by 40 pixels
-            child: SvgPicture.asset(
-              AppIcons.qiblaNeedle,
-            ),
-          ),
+        const SizedBox(height: 24),
+
+        // 📝 Instruction text
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24),
+          child: CustomText(
+            text: "To determine the Qibla direction, slowly rotate your phone left and right and keep it steady, parallel to the ground.",
+            fontSize: 14,
+            textAlign: TextAlign.center,
+            fontWeight: FontWeight.w600,
+          )
         ),
+
       ],
     );
   }
-
 }
 

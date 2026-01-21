@@ -105,7 +105,7 @@ class HomeContent extends StatelessWidget {
                     children: [
                       // Left
                       Expanded(
-                        flex: 3,
+                        flex: 7,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -137,11 +137,11 @@ class HomeContent extends StatelessWidget {
                                   CustomText(
                                     text:
                                     parts.isNotEmpty ? parts[0] : '',
-                                    fontSize: 36,
+                                    fontSize: 35,
                                     fontWeight: FontWeight.w700,
                                     color: backgroundColor,
                                   ),
-                                  const SizedBox(width: 5),
+
                                   CustomText(
                                     text:
                                     parts.length > 1 ? parts[1] : '',
@@ -149,7 +149,6 @@ class HomeContent extends StatelessWidget {
                                     fontWeight: FontWeight.w400,
                                     color: backgroundColor,
                                   ),
-                                  const SizedBox(width: 5),
                                   const CustomText(
                                     text: "(Start Time)",
                                     fontSize: 13,
@@ -174,7 +173,7 @@ class HomeContent extends StatelessWidget {
                       ),
 
                       Expanded(
-                          flex: 2,
+                          flex: 4,
                           child: SvgPicture.asset(AppIcons.boy)
                       ),
                     ],

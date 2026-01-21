@@ -75,6 +75,8 @@ abstract class AppIcons {
   static const gpsIcon = 'assets/images/gps.svg';
   static const compassCircle = 'assets/images/compass_circle.svg';
   static const qiblaIconLoc = 'assets/images/qibla_icon_loc.svg';
+  static const compass = 'assets/images/compass.svg';
+  static const qiblaNeedle = 'assets/images/qibla_needle.svg';
 }
 //ex:
 // SvgPicture.asset(AppIcons.splashBackground,fit: BoxFit.cover,),

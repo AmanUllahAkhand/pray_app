@@ -10,3 +10,4 @@ const Color tranquilColor = Color(0xFFDCEDE9);
 const Color moonlightJade = Color(0xFFC7E3DE);
 const Color gramsHair = Color(0xFFF3F8F7);
 const Color bashful = Color(0xFFE3EEEC);
+const Color mauiMist = Color(0xFFEEF3F2);

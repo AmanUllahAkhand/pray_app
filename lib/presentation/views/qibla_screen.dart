@@ -15,49 +15,74 @@ class QiblaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: mauiMist,
       appBar: AppBar(title: const Text("Qibla Compass")),
-      body: Center(
-        child: Obx(() {
-          final status = controller.locationStatus.value;
+      body: Stack(
+        children: [
+          // Bottom background image
+          Positioned(
+            bottom: 0,
+            left: 0,
+            child: SvgPicture.asset(
+              AppIcons.qiblaBg,
+              width: screenWidth,
+            ),
+          ),
 
-          if (status == null) {
-            return const CircularProgressIndicator();
-          }
+          // Main content (centered)
+          Center(
+            child: Obx(() {
+              final status = controller.locationStatus.value;
 
-          if (!status.enabled) {
-            return LocationErrorWidget(
-              error: "Please enable Location service",
-              callback: controller.retry,
-            );
-          }
-
-          switch (status.status) {
-            case LocationPermission.denied:
-              return LocationErrorWidget(
-                error: "Location permission denied",
-                callback: controller.retry,
-              );
-            case LocationPermission.deniedForever:
-              return LocationErrorWidget(
-                error: "Location permission denied forever",
-                callback: controller.retry,
-              );
-            case LocationPermission.always:
-            case LocationPermission.whileInUse:
-              final direction = controller.qiblahDirection.value;
-              if (direction == null) {
+              if (status == null) {
                 return const CircularProgressIndicator();
               }
-              return _buildCompass(direction);
-            default:
-              return Container();
-          }
-        }),
+
+              if (!status.enabled) {
+                return LocationErrorWidget(
+                  error: "Please enable Location service",
+                  callback: controller.retry,
+                );
+              }
+
+              switch (status.status) {
+                case LocationPermission.denied:
+                  return LocationErrorWidget(
+                    error: "Location permission denied",
+                    callback: controller.retry,
+                  );
+                case LocationPermission.deniedForever:
+                  return LocationErrorWidget(
+                    error: "Location permission denied forever",
+                    callback: controller.retry,
+                  );
+                case LocationPermission.always:
+                case LocationPermission.whileInUse:
+                  final direction = controller.qiblahDirection.value;
+                  if (direction == null) {
+                    return const CircularProgressIndicator();
+                  }
+                  return Center(
+                  child: Transform.translate(
+                  offset: const Offset(0, -80), // move up by 20 pixels
+              child: _buildCompass(direction),
+              ),
+              );
+
+              default:
+                  return Container();
+              }
+            }),
+          ),
+        ],
       ),
     );
   }
+
 
   Widget _buildCompass(QiblahDirection direction) {
     return Stack(

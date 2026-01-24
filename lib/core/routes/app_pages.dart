@@ -20,6 +20,7 @@ import '../../presentation/bindings/tasbhi_binding.dart';
 import '../../presentation/views/about_qalam_screen.dart';
 import '../../presentation/views/calendar_screen.dart';
 import '../../presentation/views/language_screen.dart';
+import '../../presentation/views/location_settings_screen.dart';
 import '../../presentation/views/privacy_policy_screen.dart';
 import '../../presentation/views/qibla_screen.dart';
 import '../../presentation/views/support_screen.dart';
@@ -86,6 +87,10 @@ class AppPages {
       name: AppRoutes.qibla,
       page: () => QiblaScreen(),
       binding: QiblaBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.location,
+      page: () => LocationSettingsScreen(),
     ),
   ];
 }

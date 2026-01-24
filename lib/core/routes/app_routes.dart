@@ -11,4 +11,5 @@ class AppRoutes {
   static const privacyPolicy = '/PrivacyPolicy';
   static const calendar = '/Calendar';
   static const qibla = '/qibla';
+  static const location = '/LocationSettingsScreen';
 }

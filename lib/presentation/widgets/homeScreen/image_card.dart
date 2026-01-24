@@ -52,7 +52,7 @@ class ImageFeatureCardsSection extends StatelessWidget {
               child: SvgFeatureCard(
                 title: "Tashbih Counter",
                 svgPath: AppIcons.tashbih_counter_bg,
-                onTap: () {},
+                onTap: () {Get.toNamed(AppRoutes.location);},
               ),
             ),
           ],

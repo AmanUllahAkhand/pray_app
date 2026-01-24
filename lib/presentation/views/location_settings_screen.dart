@@ -74,11 +74,10 @@ class LocationSettingsScreen extends StatelessWidget {
                       showPhoneCode: false,
                       onSelect: (Country country) {
                         ctrl.selectedCountry.value = country.name;
-      
-                        /// If not Bangladesh → force GPS
+
                         if (!ctrl.isBangladesh) {
                           ctrl.locationMode.value = LocationMode.gps;
-                          ctrl.requestGpsLocation();
+                          ctrl.forceGpsPermission();
                         }
                       },
                     );
@@ -112,10 +111,10 @@ class LocationSettingsScreen extends StatelessWidget {
                     group: ctrl.locationMode.value,
                     onChanged: (v) async {
                       ctrl.locationMode.value = v!;
-                      await ctrl.requestGpsLocation(); // 👈 permission popup
+                      await ctrl.forceGpsPermission(); // 👈 NEW
                     },
                   ),
-      
+
                   /// DISTRICT DROPDOWN
                   if (ctrl.locationMode.value == LocationMode.district) ...[
                     const SizedBox(height: 12),

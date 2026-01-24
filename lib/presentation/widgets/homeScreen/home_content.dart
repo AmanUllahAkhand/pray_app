@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:pray_app/presentation/widgets/homeScreen/prayer_time_card.dart';
 import 'package:pray_app/presentation/widgets/homeScreen/prohibited_times_section.dart';
+import 'package:pray_app/presentation/widgets/homeScreen/sehri_iftarInfo_card.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_icons.dart';
 import '../../controllers/home_controller.dart';
@@ -196,16 +197,24 @@ class HomeContent extends StatelessWidget {
               ),
               padding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Feature Buttons
-                  FeatureButtonGrid(),
+                  const FeatureButtonGrid(),
+                  SehriIftarInfoCard(
+                    sehriEnd: "05:24 AM",
+                    iftarStart: "05:38 PM",
+                    remainingSehri: "09:08:49",
+                    onSehriAlarmTap: () {},
+                    onIftarAlarmTap: () {},
+                  ),
+                  const SizedBox(height: 20),
                   // ImageFeatureCardsSection
-                  ImageFeatureCardsSection(),
-                  SizedBox(height: 20),
+                  const ImageFeatureCardsSection(),
+                  const SizedBox(height: 20),
                   // Prohibited Times
-                  ProhibitedTimesSection(),
+                  const ProhibitedTimesSection(),
                 ],
               ),
             ),

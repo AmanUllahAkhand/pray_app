@@ -1,27 +1,44 @@
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:pray_app/domain/usecases/get_location.dart';
-import '../../domain/repositories/location_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LocationController extends GetxController {
-  final GetLocation getLocationUseCase;
+  final currentPosition = Rxn<Position>();
 
-  LocationController(this.getLocationUseCase);
+  final latitude = 0.0.obs;
+  final longitude = 0.0.obs;
 
-  var currentPosition = Rxn<Position>();
+  LocationController(GetLocation find);
 
   @override
   void onInit() {
     super.onInit();
-    fetchLocation();
+    loadSavedLocation();
   }
 
-  Future<void> fetchLocation() async {
-    currentPosition.value = await getLocationUseCase.call();
-  }
+  Future<void> loadSavedLocation() async {
+    final prefs = await SharedPreferences.getInstance();
 
-  Future<void> setManual(double lat, double lng) async {
-    await Get.find<LocationRepository>().setManualLocation(lat, lng);
-    fetchLocation();
+    final lat = prefs.getDouble('lat');
+    final lng = prefs.getDouble('lng');
+
+    if (lat != null && lng != null) {
+      latitude.value = lat;
+      longitude.value = lng;
+
+      currentPosition.value = Position(
+        latitude: lat,
+        longitude: lng,
+        timestamp: DateTime.now(),
+        accuracy: 1,
+        altitude: 0,
+        altitudeAccuracy: 0,
+        heading: 0,
+        headingAccuracy: 0,
+        speed: 0,
+        speedAccuracy: 0,
+      );
+    }
   }
 }

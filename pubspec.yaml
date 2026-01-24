@@ -29,6 +29,9 @@ dependencies:
   shimmer: ^3.0.0
   cupertino_icons: ^1.0.1
   dynamic_color: ^1.7.0
+  http: ^1.6.0
+  country_picker: ^2.0.27
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

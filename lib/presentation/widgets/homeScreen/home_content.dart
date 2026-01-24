@@ -8,6 +8,7 @@ import 'package:pray_app/presentation/widgets/homeScreen/prohibited_times_sectio
 import 'package:pray_app/presentation/widgets/homeScreen/sehri_iftarInfo_card.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_icons.dart';
+import '../../../core/routes/app_routes.dart';
 import '../../controllers/home_controller.dart';
 import '../custom_text.dart';
 import 'feature_button_grid.dart';
@@ -40,23 +41,28 @@ class HomeContent extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          SvgPicture.asset(
-                            AppIcons.locationPin,
-                            width: 24,
-                            height: 24,
-                          ),
-                          const SizedBox(width: 8),
-                          Obx(() => CustomText(
-                            text: ctrl.cityName.value.isNotEmpty
-                                ? "${ctrl.cityName.value}, ${ctrl.countryName.value}"
-                                : "Detecting location...",
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: backgroundColor,
-                          )),
-                        ],
+                      InkWell(
+                        onTap: () {
+                          Get.toNamed(AppRoutes.location);
+                        },
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              AppIcons.locationPin,
+                              width: 24,
+                              height: 24,
+                            ),
+                            const SizedBox(width: 8),
+                            Obx(() => CustomText(
+                              text: ctrl.cityName.value.isNotEmpty
+                                  ? "${ctrl.cityName.value}, ${ctrl.countryName.value}"
+                                  : "Set location",
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: backgroundColor,
+                            )),
+                          ],
+                        ),
                       ),
                       ElevatedButton(
                         onPressed: () {},

@@ -7,6 +7,7 @@ import 'package:pray_app/core/constants/app_colors.dart';
 import 'package:pray_app/core/constants/app_icons.dart';
 import 'package:pray_app/core/routes/app_routes.dart';
 import 'package:pray_app/presentation/widgets/custom_text.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), () => Get.offNamed(AppRoutes.home));
+    _checkLocationAndNavigate();
   }
 
   @override
@@ -58,5 +59,18 @@ class _SplashScreenState extends State<SplashScreen> {
         ],
       ),
     );
+  }
+}
+
+Future<void> _checkLocationAndNavigate() async {
+  final prefs = await SharedPreferences.getInstance();
+  final isConfigured = prefs.getBool('locationConfigured') ?? false;
+
+  await Future.delayed(const Duration(seconds: 3));
+
+  if (isConfigured) {
+    Get.offNamed(AppRoutes.home);
+  } else {
+    Get.offNamed(AppRoutes.location);
   }
 }

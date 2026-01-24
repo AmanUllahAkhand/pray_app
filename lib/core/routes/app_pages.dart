@@ -16,6 +16,7 @@ import '../../presentation/bindings/privacy_policy_binding.dart';
 import '../../presentation/bindings/qibla_binding.dart';
 import '../../presentation/bindings/quran_binding.dart';
 import '../../presentation/bindings/support_binding.dart';
+import '../../presentation/bindings/sura_binding.dart';
 import '../../presentation/bindings/tasbhi_binding.dart';
 import '../../presentation/views/about_qalam_screen.dart';
 import '../../presentation/views/calendar_screen.dart';
@@ -24,6 +25,7 @@ import '../../presentation/views/location_settings_screen.dart';
 import '../../presentation/views/privacy_policy_screen.dart';
 import '../../presentation/views/qibla_screen.dart';
 import '../../presentation/views/support_screen.dart';
+import '../../presentation/views/sura_screen.dart';
 
 class AppPages {
   static const initial = AppRoutes.splash;
@@ -91,6 +93,11 @@ class AppPages {
     GetPage(
       name: AppRoutes.location,
       page: () => LocationSettingsScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.sura,
+      page: () => SuraScreen(),
+      binding: SuraBinding(),
     ),
   ];
 }

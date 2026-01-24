@@ -7,6 +7,7 @@ import 'package:pray_app/presentation/widgets/custom_text.dart';
 
 import '../../../core/constants/app_icons.dart';
 import '../../../core/routes/app_routes.dart';
+import '../../controllers/home_controller.dart';
 
 class ImageFeatureCardsSection extends StatelessWidget {
   const ImageFeatureCardsSection({super.key});
@@ -25,7 +26,7 @@ class ImageFeatureCardsSection extends StatelessWidget {
           child: SvgFeatureCard(
             title: "Record Your Prayer",
             svgPath: AppIcons.record_prayer_bg,
-            onTap: () {},
+            onTap: () {Get.toNamed(AppRoutes.sura);},
           ),
         ),
 
@@ -52,7 +53,12 @@ class ImageFeatureCardsSection extends StatelessWidget {
               child: SvgFeatureCard(
                 title: "Tashbih Counter",
                 svgPath: AppIcons.tashbih_counter_bg,
-                onTap: () {Get.toNamed(AppRoutes.location);},
+                onTap: () {
+                  // 🔹 Switch BottomNavBar to index 3
+                  if (Get.isRegistered<HomeController>()) {
+                    Get.find<HomeController>().changeTab(3);
+                  }
+                },
               ),
             ),
           ],

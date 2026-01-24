@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_icons.dart';
+import '../../../core/routes/app_routes.dart';
+import '../../controllers/home_controller.dart';
 import '../custom_text.dart';
 
 class FeatureButtonGrid extends StatelessWidget {
@@ -9,16 +12,18 @@ class FeatureButtonGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ctrl = Get.find<HomeController>();
+
     final items = [
-      _FeatureItem("Prayer Time", AppIcons.prayerTime),
-      _FeatureItem("Quran", AppIcons.quranIcon),
-      _FeatureItem("Qibla", AppIcons.qiblaIcon),
-      _FeatureItem("Tasbih", AppIcons.tasbihIcon),
-      _FeatureItem("Calendar", AppIcons.calanderIcon),
+      _FeatureItem("Prayer Time", AppIcons.prayerTime, 1), // bottom nav index 2
+      _FeatureItem("Quran", AppIcons.quranIcon, 2), // bottom nav index 3
+      _FeatureItem("Qibla", AppIcons.qiblaIcon, null, route: AppRoutes.qibla),
+      _FeatureItem("Tasbih", AppIcons.tasbihIcon, 3), // bottom nav index 4
+      _FeatureItem("Calendar", AppIcons.calanderIcon, null, route: AppRoutes.calendar),
     ];
 
     return SizedBox(
-      height: 110, // enough for icon + title
+      height: 110,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: items.length,
@@ -30,7 +35,11 @@ class FeatureButtonGrid extends StatelessWidget {
             title: item.title,
             icon: item.icon,
             onTap: () {
-              // handle tap
+              if (item.navIndex != null) {
+                ctrl.changeTab(item.navIndex!);
+              } else if (item.route != null) {
+                Get.toNamed(item.route!);
+              }
             },
           );
         },
@@ -42,8 +51,10 @@ class FeatureButtonGrid extends StatelessWidget {
 class _FeatureItem {
   final String title;
   final String icon;
+  final int? navIndex; // index of BottomNavBar
+  final String? route; // optional route
 
-  _FeatureItem(this.title, this.icon);
+  _FeatureItem(this.title, this.icon, this.navIndex, {this.route});
 }
 
 class FeatureButtonItem extends StatelessWidget {

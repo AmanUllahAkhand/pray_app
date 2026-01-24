@@ -12,4 +12,5 @@ class AppRoutes {
   static const calendar = '/Calendar';
   static const qibla = '/qibla';
   static const location = '/LocationSettingsScreen';
+  static const sura = '/sura';
 }

@@ -49,8 +49,8 @@ class SuraScreen extends GetView<SuraController> {
                 fit: BoxFit.cover,
               ),
             ),
-            child: Column(
-              children: const [
+            child: const Column(
+              children: [
                 CustomText(
                   text: 'Surah Al-Fatihah',
                   fontSize: 18,

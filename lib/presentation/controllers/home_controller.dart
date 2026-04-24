@@ -29,6 +29,7 @@ class HomeController extends GetxController {
   final cityName = ''.obs;
   final countryName = ''.obs;
   var gregorianDate = ''.obs;
+  var currentPrayerStartTime = ''.obs;
   final locationInfoService = LocationInfoService();
   final homePrayerApi = HomePrayerApiService();
   var homePrayerTimes = Rxn<HomePrayerTimesModel>();
@@ -109,31 +110,7 @@ class HomeController extends GetxController {
       print("Prayer times error: $e");
     }
   }
-  void _calculatePrayerRanges(PrayerTime times) {
-    final prayerList = [
-      {'name': 'Fajr', 'time': times.fajr},
-      {'name': 'Dhuhr', 'time': times.dhuhr},
-      {'name': 'Asr', 'time': times.asr},
-      {'name': 'Maghrib', 'time': times.maghrib},
-      {'name': 'Isha', 'time': times.isha},
-    ];
 
-    final Map<String, String> ranges = {};
-
-    for (int i = 0; i < prayerList.length; i++) {
-      final start = prayerList[i]['time'] as DateTime;
-
-      final end = i < prayerList.length - 1
-          ? prayerList[i + 1]['time'] as DateTime
-          : (prayerList.first['time'] as DateTime)
-          .add(const Duration(days: 1));
-
-      ranges[prayerList[i]['name'] as String] =
-          formatPrayerRange(start, end);
-    }
-
-    prayerRanges.value = ranges;
-  }
 
   void updateCurrentPrayerAndTimeLeft() {
     final now = DateTime.now();
@@ -148,27 +125,45 @@ class HomeController extends GetxController {
       {'name': 'Isha', 'time': times.isha},
     ];
 
-    DateTime? nextTime;
-    String? nextName;
+    String current = 'Asr';
+    DateTime? nextPrayerTime;
+    DateTime? currentStart;
 
-    for (final p in prayers) {
-      if (now.isBefore(p['time'] as DateTime)) {
-        nextTime = p['time'] as DateTime;
-        nextName = p['name'] as String;
+    for (int i = 0; i < prayers.length; i++) {
+      final start = prayers[i]['time'] as DateTime;
+
+      final end = i < prayers.length - 1
+          ? prayers[i + 1]['time'] as DateTime
+          : (prayers[0]['time'] as DateTime).add(const Duration(days: 1));
+
+      if (now.isAfter(start) && now.isBefore(end)) {
+        current = prayers[i]['name'] as String;
+        currentStart = start;
+        nextPrayerTime = end;
         break;
       }
     }
 
-    if (nextTime == null) {
-      nextTime = (prayers.first['time'] as DateTime).add(const Duration(days: 1));
-      nextName = 'Fajr';
+    if (nextPrayerTime == null) {
+      current = 'Isha';
+      currentStart = times.isha;
+      nextPrayerTime = (times.fajr).add(const Duration(days: 1));
     }
 
-    currentPrayer.value = nextName ?? 'Isha';
+    currentPrayer.value = current;
 
-    final diff = nextTime.difference(now);
+    // ✅ set START TIME
+    if (currentStart != null) {
+      currentPrayerStartTime.value =
+          DateFormat('hh:mm a').format(currentStart);
+    }
+
+    final diff = nextPrayerTime.difference(now);
+
     timeLeft.value =
-    "${diff.inHours.toString().padLeft(2, '0')}:${(diff.inMinutes % 60).toString().padLeft(2, '0')}:${(diff.inSeconds % 60).toString().padLeft(2, '0')}";
+    "${diff.inHours.toString().padLeft(2, '0')}:"
+        "${(diff.inMinutes % 60).toString().padLeft(2, '0')}:"
+        "${(diff.inSeconds % 60).toString().padLeft(2, '0')}";
   }
 
 

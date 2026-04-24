@@ -150,7 +150,6 @@ class HomeContent extends StatelessWidget {
                                     fontWeight: FontWeight.w700,
                                     color: backgroundColor,
                                   ),
-
                                   CustomText(
                                     text:
                                     parts.length > 1 ? parts[1] : '',
@@ -158,6 +157,7 @@ class HomeContent extends StatelessWidget {
                                     fontWeight: FontWeight.w400,
                                     color: backgroundColor,
                                   ),
+                                  const SizedBox(width: 6),
                                   const CustomText(
                                     text: "(Start Time)",
                                     fontSize: 13,

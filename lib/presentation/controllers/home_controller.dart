@@ -6,8 +6,9 @@ import 'package:intl/intl.dart';
 import 'package:pray_app/domain/entities/prayer_time.dart';
 import 'package:pray_app/domain/usecases/get_prayer_times.dart';
 import 'package:pray_app/presentation/controllers/location_controller.dart';
-
 import '../../core/constants/app_icons.dart';
+import '../../data/datasources/home_prayer_api_service.dart';
+import '../../data/models/home/home_prayer_times_model.dart';
 
 class HomeController extends GetxController {
   final GetPrayerTimes getPrayerTimesUseCase;
@@ -26,6 +27,8 @@ class HomeController extends GetxController {
   final currentTime = ''.obs;
   final cityName = ''.obs;
   final countryName = ''.obs;
+  final homePrayerApi = HomePrayerApiService();
+  var homePrayerTimes = Rxn<HomePrayerTimesModel>();
 
 
   Timer? _timer;
@@ -62,23 +65,40 @@ class HomeController extends GetxController {
     final position = Get.find<LocationController>().currentPosition.value;
     if (position == null) return;
 
-    print("Latitude: ${position.latitude}");
-    print("Longitude: ${position.longitude}");
-
     try {
-      final date = DateTime.now();
-      final times = await getPrayerTimesUseCase.call(position, date);
+      final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+      // 🔥 API CALL
+      final apiData = await homePrayerApi.fetchPrayerTimes(
+        lat: position.latitude,
+        lng: position.longitude,
+        date: date,
+      );
+
+      if (apiData != null) {
+        homePrayerTimes.value = apiData;
+
+        // map API → UI ranges
+        prayerRanges.value = {
+          "Fajr":
+          "${formatToAmPm(apiData.fajr.start)} – ${formatToAmPm(apiData.fajr.end)}",
+          "Dhuhr":
+          "${formatToAmPm(apiData.dhuhr.start)} – ${formatToAmPm(apiData.dhuhr.end)}",
+          "Asr":
+          "${formatToAmPm(apiData.asr.start)} – ${formatToAmPm(apiData.asr.end)}",
+          "Maghrib":
+          "${formatToAmPm(apiData.maghrib.start)} – ${formatToAmPm(apiData.maghrib.end)}",
+          "Isha":
+          "${formatToAmPm(apiData.isha.start)} – ${formatToAmPm(apiData.isha.end)}",
+        };
+      }
+
+      // OPTIONAL: keep existing logic
+      final times = await getPrayerTimesUseCase.call(position, DateTime.now());
       prayerTime.value = times;
 
-      hijriDate.value =
-          getPrayerTimesUseCase.getHijri() ?? "Hijri date unavailable";
-
-      prohibitedTimes.value =
-          getPrayerTimesUseCase.getProhibited(position, date);
-
-      _calculatePrayerRanges(times);
-
       updateCurrentPrayerAndTimeLeft();
+
     } catch (e) {
       print("Prayer times error: $e");
     }
@@ -217,4 +237,12 @@ class HomeController extends GetxController {
     }
   }
 
+}
+String formatToAmPm(String time24) {
+  try {
+    final parsedTime = DateFormat("HH:mm").parse(time24);
+    return DateFormat("h:mma").format(parsedTime);
+  } catch (e) {
+    return time24;
+  }
 }

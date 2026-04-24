@@ -50,7 +50,7 @@ class PrayerTimeCard extends StatelessWidget {
         CustomText(
           text: time,
           color: activeColor,
-          fontSize: 12,
+          fontSize:8,
           fontWeight:isActive ? FontWeight.w600 : FontWeight.w400,
         ),
       ],

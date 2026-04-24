@@ -232,13 +232,6 @@ class HomeContent extends StatelessWidget {
 
   Widget _buildPrayerTimesRow(HomeController ctrl) {
     final names = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
-    final icons = [
-      AppIcons.fajr,
-      AppIcons.dhuhr,
-      AppIcons.asr,
-      AppIcons.maghrib,
-      AppIcons.isha,
-    ];
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -248,13 +241,14 @@ class HomeContent extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: List.generate(5, (index) {
-          final isActive =
-              ctrl.currentPrayer.value == names[index];
+        children: List.generate(names.length, (index) {
+          final name = names[index];
+          final isActive = ctrl.currentPrayer.value == name;
+
           return PrayerTimeCard(
-            name: names[index],
-            time: ctrl.prayerRanges[names[index]] ?? '',
-            icon: icons[index],
+            name: name,
+            time: ctrl.prayerRanges[name] ?? '',
+            icon: ctrl.getPrayerIcon(name),
             isActive: isActive,
           );
         }),

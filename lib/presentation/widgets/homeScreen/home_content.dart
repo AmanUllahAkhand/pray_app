@@ -97,12 +97,14 @@ class HomeContent extends StatelessWidget {
                   const SizedBox(height: 8),
 
                   // Hijri Date
-                  CustomText(
-                    text: ctrl.formatHijriDate(ctrl.hijriDate.value),
+                  Obx(() => CustomText(
+                    text: ctrl.hijriDate.value.isNotEmpty
+                        ? ctrl.formatHijriDate(ctrl.hijriDate.value)
+                        : "Loading...",
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                     color: backgroundColor,
-                  ),
+                  )),
 
                   const SizedBox(height: 6),
 

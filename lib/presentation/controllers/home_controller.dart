@@ -8,6 +8,7 @@ import 'package:pray_app/domain/usecases/get_prayer_times.dart';
 import 'package:pray_app/presentation/controllers/location_controller.dart';
 import '../../core/constants/app_icons.dart';
 import '../../data/datasources/home_prayer_api_service.dart';
+import '../../data/datasources/location_info_service.dart';
 import '../../data/models/home/home_prayer_times_model.dart';
 
 class HomeController extends GetxController {
@@ -27,6 +28,8 @@ class HomeController extends GetxController {
   final currentTime = ''.obs;
   final cityName = ''.obs;
   final countryName = ''.obs;
+  var gregorianDate = ''.obs;
+  final locationInfoService = LocationInfoService();
   final homePrayerApi = HomePrayerApiService();
   var homePrayerTimes = Rxn<HomePrayerTimesModel>();
 
@@ -42,6 +45,9 @@ class HomeController extends GetxController {
     ever(locationCtrl.currentPosition, (pos) {
       if (pos != null) {
         setLocationFromLatLng(pos.latitude, pos.longitude);
+
+        fetchLocationInfo(pos.latitude, pos.longitude); // 🔥 NEW
+
         fetchPrayerTimes();
       }
     });
@@ -165,9 +171,6 @@ class HomeController extends GetxController {
     "${diff.inHours.toString().padLeft(2, '0')}:${(diff.inMinutes % 60).toString().padLeft(2, '0')}:${(diff.inSeconds % 60).toString().padLeft(2, '0')}";
   }
 
-  // String formatTime(DateTime time) {
-  //   return DateFormat('h:mm a').format(time);
-  // }
 
   String formatPrayerRange(DateTime start, DateTime end) {
     final startTime = DateFormat('h:mm').format(start);
@@ -220,6 +223,23 @@ class HomeController extends GetxController {
 
   void _updateCurrentTime() {
     currentTime.value = DateFormat('hh:mm a').format(DateTime.now());
+  }
+  Future<void> fetchLocationInfo(double lat, double lng) async {
+    try {
+      final result = await locationInfoService.fetchLocationInfo(
+        lat: lat,
+        lng: lng,
+      );
+
+      if (result != null) {
+        cityName.value = result.city;
+        countryName.value = result.country;
+        hijriDate.value = result.hijriDate;
+        gregorianDate.value = result.gregorianDate;
+      }
+    } catch (e) {
+      print("Location Info fetch error: $e");
+    }
   }
 
   Future<void> setLocationFromLatLng(double lat, double lng) async {

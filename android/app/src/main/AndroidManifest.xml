@@ -1,5 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Add these for location access (required for geolocator / prayer times / qibla) -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- Optional: for background location updates (if your app needs location while minimized) -->
+    <!-- <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> -->
+
     <application
+        android:enableOnBackInvokedCallback="true"
         android:label="pray"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

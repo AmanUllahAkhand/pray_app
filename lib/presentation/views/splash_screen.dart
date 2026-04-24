@@ -1,0 +1,76 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:pray_app/core/constants/app_colors.dart';
+import 'package:pray_app/core/constants/app_icons.dart';
+import 'package:pray_app/core/routes/app_routes.dart';
+import 'package:pray_app/presentation/widgets/custom_text.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _checkLocationAndNavigate();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: primaryColor,
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          // 🔹 Background SVG
+          SvgPicture.asset(
+            AppIcons.splashBackground,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
+
+          // 🔹 Logo + App Name
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SvgPicture.asset(
+                AppIcons.splashLogo,
+                width: 140,
+                height: 140,
+              ),
+              const SizedBox(height: 16),
+              const CustomText(
+                text: 'Pray App',
+                fontSize: 28,
+                fontWeight: FontWeight.w600,
+                color: backgroundColor,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+Future<void> _checkLocationAndNavigate() async {
+  final prefs = await SharedPreferences.getInstance();
+  final isConfigured = prefs.getBool('locationConfigured') ?? false;
+
+  await Future.delayed(const Duration(seconds: 3));
+
+  if (isConfigured) {
+    Get.offNamed(AppRoutes.home);
+  } else {
+    Get.offNamed(AppRoutes.location);
+  }
+}

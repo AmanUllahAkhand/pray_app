@@ -1,0 +1,152 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:pray_app/core/constants/app_colors.dart';
+import 'package:pray_app/presentation/widgets/custom_text.dart';
+
+import '../../../core/constants/app_icons.dart';
+import '../../../core/routes/app_routes.dart';
+import '../../controllers/home_controller.dart';
+
+class ImageFeatureCardsSection extends StatelessWidget {
+  const ImageFeatureCardsSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double cardWidth = (screenWidth / 2) - 22;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // LEFT: Record Your Prayer
+        SizedBox(
+          width: cardWidth,
+          height: 200,
+          child: SvgFeatureCard(
+            title: "Record Your Prayer",
+            svgPath: AppIcons.record_prayer_bg,
+            onTap: () {Get.toNamed(AppRoutes.sura);},
+          ),
+        ),
+
+        const SizedBox(width: 10),
+
+        // RIGHT: Qibla + Tashbih
+        Column(
+          children: [
+            SizedBox(
+              width: cardWidth,
+              height: 95,
+              child: SvgFeatureCard(
+                title: "Qibla Finder",
+                svgPath: AppIcons.qibla_finder_bg,
+                onTap: () {Get.toNamed(AppRoutes.qibla);},
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            SizedBox(
+              width: cardWidth,
+              height: 95,
+              child: SvgFeatureCard(
+                title: "Tashbih Counter",
+                svgPath: AppIcons.tashbih_counter_bg,
+                onTap: () {
+                  // 🔹 Switch BottomNavBar to index 3
+                  if (Get.isRegistered<HomeController>()) {
+                    Get.find<HomeController>().changeTab(3);
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+
+class SvgFeatureCard extends StatelessWidget {
+  final String title;
+  final String svgPath;
+  final VoidCallback onTap;
+  final double height;
+
+  const SvgFeatureCard({
+    super.key,
+    required this.title,
+    required this.svgPath,
+    required this.onTap,
+    this.height = 140,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: height,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Stack(
+          children: [
+            // SVG Background
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: SvgPicture.asset(
+                svgPath,
+                width: double.infinity,
+                height: double.infinity,
+                fit: BoxFit.fill,
+              ),
+            ),
+
+            // Content
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomText(
+                    text: title,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: backgroundColor,
+                  ),
+                  const Spacer(),
+                  Container(
+                    padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+
+                        CustomText(
+                          text:  "Go",
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: backgroundColor,
+                        ),
+                        SizedBox(width: 4),
+                        Icon(Icons.arrow_forward_ios,
+                            size: 10, color: Colors.white),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

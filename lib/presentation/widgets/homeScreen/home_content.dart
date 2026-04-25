@@ -241,13 +241,14 @@ class HomeContent extends StatelessWidget {
                 children: [
                   const FeatureButtonGrid(),
 
-                  SehriIftarInfoCard(
+                  Obx(() => SehriIftarInfoCard(
                     sehriEnd: ctrl.ramadanTime.value?.sehriLast ?? "--",
                     iftarStart: ctrl.ramadanTime.value?.iftarStart ?? "--",
                     remainingSehri: ctrl.remainingTimeText.value,
+                    remainingLabel: ctrl.remainingLabel.value,
                     onSehriAlarmTap: () {},
                     onIftarAlarmTap: () {},
-                  ),
+                  )),
 
                   const SizedBox(height: 20),
 

@@ -6,6 +6,7 @@ class SehriIftarInfoCard extends StatelessWidget {
   final String sehriEnd;
   final String iftarStart;
   final String remainingSehri;
+  final String remainingLabel;
   final VoidCallback onSehriAlarmTap;
   final VoidCallback onIftarAlarmTap;
 
@@ -14,6 +15,7 @@ class SehriIftarInfoCard extends StatelessWidget {
     required this.sehriEnd,
     required this.iftarStart,
     required this.remainingSehri,
+    required this.remainingLabel,
     required this.onSehriAlarmTap,
     required this.onIftarAlarmTap,
   });
@@ -45,7 +47,7 @@ class SehriIftarInfoCard extends StatelessWidget {
           _divider(),
           _buildItem(
             title: remainingSehri,
-            subtitle: "Remaining Sehri",
+            subtitle: remainingLabel,
             actionText: "",
             onTap: null,
           ),

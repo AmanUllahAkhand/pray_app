@@ -39,6 +39,7 @@ class HomeController extends GetxController {
   var ramadanTime = Rxn<RamadanTimeModel>();
   var remainingSehriTime = ''.obs;
   var remainingTimeText = ''.obs;
+  var remainingLabel = ''.obs;
   final RamadanTimeService ramadanTimeService = RamadanTimeService();
   final locationInfoService = LocationInfoService();
   final homePrayerApi = HomePrayerApiService();
@@ -379,8 +380,9 @@ class HomeController extends GetxController {
       if (now.isBefore(sehriTime)) {
         final diff = sehriTime.difference(now);
 
+        remainingLabel.value = "Remaining Sehri";
         remainingTimeText.value =
-        "Sehri Ends In: ${_formatDuration(diff)}";
+        "${_formatDuration(diff)}";
         return;
       }
 
@@ -390,6 +392,7 @@ class HomeController extends GetxController {
       if (now.isAfter(sehriTime) && now.isBefore(iftarTime)) {
         final diff = iftarTime.difference(now);
 
+        remainingLabel.value = "Remaining Iftar";
         remainingTimeText.value =
         "${_formatDuration(diff)}";
         return;
@@ -401,6 +404,7 @@ class HomeController extends GetxController {
       final nextSehri = sehriTime.add(const Duration(days: 1));
       final diff = nextSehri.difference(now);
 
+      remainingLabel.value = "Remaining Sehri";
       remainingTimeText.value =
       "Sehri Tomorrow In: ${_formatDuration(diff)}";
 

@@ -12,8 +12,10 @@ import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_icons.dart';
 import '../../data/datasources/home_prayer_api_service.dart';
 import '../../data/datasources/location_info_service.dart';
+import '../../data/datasources/prohibited_time_api_service.dart';
 import '../../data/datasources/ramadan_time_api_service.dart';
 import '../../data/models/home/home_prayer_times_model.dart';
+import '../../data/models/home/prohibited_time_model.dart';
 import '../../data/models/home/ramadan_time_model.dart';
 
 class HomeController extends GetxController {
@@ -26,7 +28,7 @@ class HomeController extends GetxController {
   var hijriDate = ''.obs;
   var currentPrayer = 'Isha'.obs;
   var timeLeft = ''.obs;
-  var prohibitedTimes = <String, String>{}.obs;
+  // var prohibitedTimes = <String, String>{}.obs;
   var prayerRanges = <String, String>{}.obs;
   var prayerDateRanges = <String, Map<String, DateTime>>{}.obs;
   // Navigation
@@ -44,6 +46,8 @@ class HomeController extends GetxController {
   final locationInfoService = LocationInfoService();
   final homePrayerApi = HomePrayerApiService();
   var homePrayerTimes = Rxn<HomePrayerTimesModel>();
+  final prohibitedTimeService = ProhibitedTimeService();
+  var prohibitedTimes = <String, ProhibitedTimeModel>{}.obs;
 
 
   Timer? _timer;
@@ -59,7 +63,7 @@ class HomeController extends GetxController {
         setLocationFromLatLng(pos.latitude, pos.longitude);
         fetchLocationInfo(pos.latitude, pos.longitude);
         fetchRamadanTime(pos.latitude, pos.longitude);
-
+        fetchProhibitedTimes(pos.latitude, pos.longitude);
         fetchPrayerTimes();
       }
     });
@@ -428,6 +432,28 @@ class HomeController extends GetxController {
     return "${diff.inHours.toString().padLeft(2, '0')}:"
         "${(diff.inMinutes % 60).toString().padLeft(2, '0')}:"
         "${(diff.inSeconds % 60).toString().padLeft(2, '0')}";
+  }
+
+  Future<void> fetchProhibitedTimes(double lat, double lng) async {
+    try {
+      final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+      final data = await prohibitedTimeService.fetch(
+        lat: lat,
+        lng: lng,
+        date: date,
+      );
+
+      if (data != null) {
+        prohibitedTimes.value = {
+          "Dawn": ProhibitedTimeModel.fromJson(data["dawn"]),
+          "Afternoon": ProhibitedTimeModel.fromJson(data["afternoon"]),
+          "Evening": ProhibitedTimeModel.fromJson(data["evening"]),
+        };
+      }
+    } catch (e) {
+      print("Prohibited API error: $e");
+    }
   }
 
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:pray_app/core/constants/app_colors.dart';
+import 'package:pray_app/core/constants/app_icons.dart';
 import 'package:pray_app/presentation/controllers/home_controller.dart';
 import 'package:pray_app/presentation/widgets/custom_text.dart';
-
-import '../../../core/constants/app_icons.dart';
 
 class ProhibitedTimesSection extends StatelessWidget {
   const ProhibitedTimesSection({super.key});
@@ -15,81 +15,73 @@ class ProhibitedTimesSection extends StatelessWidget {
     final controller = Get.find<HomeController>();
 
     return Obx(() {
-      if (controller.prohibitedTimes.isEmpty) {
-        return const SizedBox.shrink();
-      }
+      final data = controller.prohibitedTimes;
 
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+      if (data.isEmpty) return const SizedBox.shrink();
 
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Stack(
-              children: [
-                /// Background SVG
-                Positioned.fill(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: SvgPicture.asset(
-                      AppIcons.mosqueBg,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Stack(
+          children: [
+            /// ================= BACKGROUND =================
+            Positioned.fill(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: SvgPicture.asset(
+                  AppIcons.mosqueBg,
+                  fit: BoxFit.cover,
                 ),
-
-                /// Content
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const CustomText(
-                        text: "Prohibited times for prayer",
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        color: primaryColor,
-                      ),
-                      SizedBox(height: 10),
-                      _row(
-                        title: "Dawn",
-                        time: "05:00 am - 06:00 am",
-                      ),
-                      const SizedBox(height: 12),
-
-                      _row(
-                        title: "Afternoon",
-                        time: "12:00 pm - 01:00 pm",
-                      ),
-                      const SizedBox(height: 12),
-
-                      _row(
-                        title: "Evening",
-                        time: "05:00 pm - 06:00 pm",
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+
+            /// ================= CONTENT =================
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const CustomText(
+                    text: "Prohibited times for prayer",
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    color: primaryColor,
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  /// Dynamic rows from API
+                  ...data.entries.map((entry) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: _row(
+                        title: entry.key,
+                        start: entry.value.start,
+                        end: entry.value.end,
+                      ),
+                    );
+                  }).toList(),
+                ],
+              ),
+            ),
+          ],
+        ),
       );
     });
   }
 
+  /// ================= ROW =================
   Widget _row({
     required String title,
-    required String time,
+    required String start,
+    required String end,
   }) {
-    // Example input: "05:00 am - 06:00 am"
-    final parts = time.split(' - ');
+    final startFormatted = _formatToAmPm(start);
+    final endFormatted = _formatToAmPm(end);
 
-    final start = parts[0].split(' ');
-    final end = parts[1].split(' ');
+    final startParts = startFormatted.split(' ');
+    final endParts = endFormatted.split(' ');
 
     return Row(
       children: [
@@ -104,9 +96,9 @@ class ProhibitedTimesSection extends StatelessWidget {
           text: TextSpan(
             style: const TextStyle(color: Colors.black),
             children: [
-              // Start time
+              /// START TIME
               TextSpan(
-                text: '${start[0]} ',
+                text: '${startParts[0]} ',
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -114,7 +106,7 @@ class ProhibitedTimesSection extends StatelessWidget {
                 ),
               ),
               TextSpan(
-                text: start[1],
+                text: startParts.length > 1 ? startParts[1] : '',
                 style: const TextStyle(
                   fontSize: 8,
                   fontWeight: FontWeight.w600,
@@ -122,14 +114,11 @@ class ProhibitedTimesSection extends StatelessWidget {
                 ),
               ),
 
-              const TextSpan(
-                text: ' - ',
-                style: TextStyle(fontSize: 14),
-              ),
+              const TextSpan(text: ' - '),
 
-              // End time
+              /// END TIME
               TextSpan(
-                text: '${end[0]} ',
+                text: '${endParts[0]} ',
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -137,7 +126,7 @@ class ProhibitedTimesSection extends StatelessWidget {
                 ),
               ),
               TextSpan(
-                text: end[1],
+                text: endParts.length > 1 ? endParts[1] : '',
                 style: const TextStyle(
                   fontSize: 8,
                   fontWeight: FontWeight.w600,
@@ -149,5 +138,15 @@ class ProhibitedTimesSection extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  /// ================= FORMAT TIME =================
+  String _formatToAmPm(String time24) {
+    try {
+      final parsed = DateFormat("HH:mm").parse(time24);
+      return DateFormat("hh:mm a").format(parsed); // → 05:25 AM
+    } catch (e) {
+      return time24;
+    }
   }
 }

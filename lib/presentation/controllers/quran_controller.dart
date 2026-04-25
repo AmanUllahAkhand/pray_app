@@ -1,31 +1,68 @@
 import 'package:get/get.dart';
+import '../../data/datasources/Quran/quran_api_service.dart';
 import '../../data/models/quran/sura_model.dart';
 
 class QuranController extends GetxController {
   final searchQuery = ''.obs;
 
-  final suraList = <SuraModel>[
-    SuraModel(id: 1, nameEn: 'Al-Faatiha', nameAr: 'ٱلْفَاتِحَةُ', verses: 7, type: 'Meccan'),
-    SuraModel(id: 2, nameEn: 'Al-Baqarah', nameAr: 'ٱلْبَقَرَةُ', verses: 286, type: 'Medinan'),
-    SuraModel(id: 3, nameEn: 'Al-Imran', nameAr: 'آلِ عِمْرَانَ', verses: 200, type: 'Medinan'),
-    SuraModel(id: 4, nameEn: 'An-Nisa', nameAr: 'ٱلنِّسَاءُ', verses: 176, type: 'Medinan'),
-    SuraModel(id: 5, nameEn: 'Al-Ma\'idah', nameAr: 'ٱلْمَائِدَةُ', verses: 120, type: 'Medinan'),
-    SuraModel(id: 6, nameEn: 'Al-An\'am', nameAr: 'ٱلْأَنْعَامُ', verses: 165, type: 'Meccan'),
-    SuraModel(id: 6, nameEn: 'Al-An\'am', nameAr: 'ٱلْأَنْعَامُ', verses: 165, type: 'Meccan'),
-    SuraModel(id: 6, nameEn: 'Al-An\'am', nameAr: 'ٱلْأَنْعَامُ', verses: 165, type: 'Meccan'),
-    SuraModel(id: 6, nameEn: 'Al-An\'am', nameAr: 'ٱلْأَنْعَامُ', verses: 165, type: 'Meccan'),
-    SuraModel(id: 6, nameEn: 'Al-An\'am', nameAr: 'ٱلْأَنْعَامُ', verses: 165, type: 'Meccan'),
-  ].obs;
+  final suraList = <SuraModel>[].obs;
+
+  final isLoading = false.obs;
+  final isLoadMore = false.obs;
+
+  int currentPage = 1;
+  int totalPages = 1;
+
+  final QuranApiService apiService = QuranApiService();
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchSuras(isInitial: true);
+  }
+
+  Future<void> fetchSuras({bool isInitial = false}) async {
+    try {
+      if (isInitial) {
+        isLoading.value = true;
+        currentPage = 1;
+      } else {
+        if (currentPage > totalPages) return;
+        isLoadMore.value = true;
+      }
+
+      final res = await apiService.fetchSuraList(page: currentPage);
+
+      totalPages = res.totalPages;
+
+      if (isInitial) {
+        suraList.value = res.data;
+      } else {
+        suraList.addAll(res.data);
+      }
+
+      currentPage++;
+    } catch (e) {
+      print("Pagination error: $e");
+    } finally {
+      isLoading.value = false;
+      isLoadMore.value = false;
+    }
+  }
+
+  void loadMore() {
+    if (!isLoadMore.value && currentPage <= totalPages) {
+      fetchSuras();
+    }
+  }
 
   List<SuraModel> get filteredSuraList {
-    if (searchQuery.value.isEmpty) {
-      return suraList;
-    }
-    return suraList
-        .where((s) =>
-    s.nameEn.toLowerCase().contains(searchQuery.value.toLowerCase()) ||
-        s.nameAr.contains(searchQuery.value))
-        .toList();
+    if (searchQuery.value.isEmpty) return suraList;
+
+    return suraList.where((s) {
+      return s.nameEn.toLowerCase().contains(searchQuery.value.toLowerCase()) ||
+          s.nameAr.contains(searchQuery.value);
+    }).toList();
   }
 
   void onSearch(String value) {
@@ -33,7 +70,6 @@ class QuranController extends GetxController {
   }
 
   void onSuraTap(SuraModel sura) {
-    // Navigate to Sura details
     Get.toNamed('/sura-details', arguments: sura);
   }
 }

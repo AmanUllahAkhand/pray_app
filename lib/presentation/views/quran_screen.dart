@@ -75,66 +75,76 @@ class QuranScreen extends StatelessWidget {
 
           /// TableView (ListView)
           Expanded(
-            child: Obx(
-                  () => ListView.separated(
-                padding: const EdgeInsets.all(16),
-                itemCount: controller.filteredSuraList.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
-                itemBuilder: (context, index) {
-                  final sura = controller.filteredSuraList[index];
+            child: Obx(() {
+              if (controller.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-                  return InkWell(
-                    borderRadius: BorderRadius.circular(14),
-                    onTap: () => controller.onSuraTap(sura),
-                    child: Container(
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: bashful,
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: Row(
-                        children: [
-                          /// Index
-                          SuraCountBadge(
-                            count: sura.id.toString(),
-                          ),
-                          const SizedBox(width: 12),
-
-                          /// Name & Info
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CustomText(
-                                  text:sura.nameEn,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16,
-                                ),
-                                const SizedBox(height: 4),
-                                CustomText(
-                                  text:'Verses: ${sura.verses} | ${sura.type}',
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          /// Arabic Name
-                          CustomText(
-                            text:sura.nameAr,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.teal,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+              return NotificationListener<ScrollNotification>(
+                onNotification: (scrollInfo) {
+                  if (scrollInfo.metrics.pixels ==
+                      scrollInfo.metrics.maxScrollExtent) {
+                    controller.loadMore();
+                  }
+                  return false;
                 },
-              ),
-            ),
-          ),
+                child: ListView.separated(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: controller.filteredSuraList.length +
+                      (controller.isLoadMore.value ? 1 : 0),
+                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  itemBuilder: (context, index) {
+                    if (index == controller.filteredSuraList.length) {
+                      return const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(12),
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+
+                    final sura = controller.filteredSuraList[index];
+
+                    return InkWell(
+                      onTap: () => controller.onSuraTap(sura),
+                      child: Container(
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: bashful,
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: Row(
+                          children: [
+                            SuraCountBadge(count: sura.id.toString()),
+                            const SizedBox(width: 12),
+
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CustomText(text: sura.nameEn),
+                                  CustomText(
+                                    text:
+                                    'Verses: ${sura.verses} | ${sura.type}',
+                                    fontSize: 12,
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            CustomText(
+                              text: sura.nameAr,
+                              color: Colors.teal,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            }),
+          )
         ],
       ),
     );

@@ -242,9 +242,9 @@ class HomeContent extends StatelessWidget {
                   const FeatureButtonGrid(),
 
                   SehriIftarInfoCard(
-                    sehriEnd: "05:24 AM",
-                    iftarStart: "05:38 PM",
-                    remainingSehri: "09:08:49",
+                    sehriEnd: ctrl.ramadanTime.value?.sehriLast ?? "--",
+                    iftarStart: ctrl.ramadanTime.value?.iftarStart ?? "--",
+                    remainingSehri: ctrl.remainingSehriTime.value,
                     onSehriAlarmTap: () {},
                     onIftarAlarmTap: () {},
                   ),

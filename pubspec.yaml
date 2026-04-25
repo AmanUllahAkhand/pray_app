@@ -31,6 +31,7 @@ dependencies:
   dynamic_color: ^1.7.0
   http: ^1.6.0
   country_picker: ^2.0.27
+  dio: ^5.9.2
 
 dev_dependencies:
   flutter_test:

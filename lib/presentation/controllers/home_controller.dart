@@ -12,7 +12,9 @@ import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_icons.dart';
 import '../../data/datasources/home_prayer_api_service.dart';
 import '../../data/datasources/location_info_service.dart';
+import '../../data/datasources/ramadan_time_api_service.dart';
 import '../../data/models/home/home_prayer_times_model.dart';
+import '../../data/models/home/ramadan_time_model.dart';
 
 class HomeController extends GetxController {
   final GetPrayerTimes getPrayerTimesUseCase;
@@ -34,6 +36,9 @@ class HomeController extends GetxController {
   final countryName = ''.obs;
   var gregorianDate = ''.obs;
   var currentPrayerStartTime = ''.obs;
+  var ramadanTime = Rxn<RamadanTimeModel>();
+  var remainingSehriTime = ''.obs;
+  final RamadanTimeService ramadanTimeService = RamadanTimeService();
   final locationInfoService = LocationInfoService();
   final homePrayerApi = HomePrayerApiService();
   var homePrayerTimes = Rxn<HomePrayerTimesModel>();
@@ -50,8 +55,8 @@ class HomeController extends GetxController {
     ever(locationCtrl.currentPosition, (pos) {
       if (pos != null) {
         setLocationFromLatLng(pos.latitude, pos.longitude);
-
-        fetchLocationInfo(pos.latitude, pos.longitude); // 🔥 NEW
+        fetchLocationInfo(pos.latitude, pos.longitude);
+        fetchRamadanTime(pos.latitude, pos.longitude);
 
         fetchPrayerTimes();
       }
@@ -205,6 +210,7 @@ class HomeController extends GetxController {
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       updateCurrentPrayerAndTimeLeft();
       _updateCurrentTime();
+      _calculateRemainingSehri();
     });
   }
   String formatHijriDate(String rawHijri) {
@@ -279,6 +285,26 @@ class HomeController extends GetxController {
     }
   }
 
+  Future<void> fetchRamadanTime(double lat, double lng) async {
+    try {
+      final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+      final data = await ramadanTimeService.fetchRamadanTime(
+        latitude: lat,
+        longitude: lng,
+        date: date,
+      );
+
+      if (data != null) {
+        ramadanTime.value = RamadanTimeModel.fromJson(data);
+
+        _calculateRemainingSehri();
+      }
+    } catch (e) {
+      print("Controller Ramadan fetch error: $e");
+    }
+  }
+
   DateTime parseToDateTime(String time) {
     final now = DateTime.now();
     final parsed = DateFormat("HH:mm").parse(time);
@@ -334,6 +360,43 @@ class HomeController extends GetxController {
     return getActivePrayerName() == "Prohibited Time"
         ? Colors.red
         : backgroundColor;
+  }
+
+  void _calculateRemainingSehri() {
+    final data = ramadanTime.value;
+    if (data == null) return;
+
+    try {
+      final now = DateTime.now();
+
+      final sehriTime = _parseTime(data.sehriLast);
+
+      if (now.isAfter(sehriTime)) {
+        remainingSehriTime.value = "Sehri Time Passed";
+        return;
+      }
+
+      final diff = sehriTime.difference(now);
+
+      remainingSehriTime.value =
+      "${diff.inHours.toString().padLeft(2, '0')}:"
+          "${(diff.inMinutes % 60).toString().padLeft(2, '0')}:"
+          "${(diff.inSeconds % 60).toString().padLeft(2, '0')}";
+    } catch (e) {
+      print("Remaining calc error: $e");
+    }
+  }
+  DateTime _parseTime(String time) {
+    final now = DateTime.now();
+    final parsed = DateFormat("hh:mm a").parse(time);
+
+    return DateTime(
+      now.year,
+      now.month,
+      now.day,
+      parsed.hour,
+      parsed.minute,
+    );
   }
 
 }

@@ -38,6 +38,7 @@ class HomeController extends GetxController {
   var currentPrayerStartTime = ''.obs;
   var ramadanTime = Rxn<RamadanTimeModel>();
   var remainingSehriTime = ''.obs;
+  var remainingTimeText = ''.obs;
   final RamadanTimeService ramadanTimeService = RamadanTimeService();
   final locationInfoService = LocationInfoService();
   final homePrayerApi = HomePrayerApiService();
@@ -370,18 +371,39 @@ class HomeController extends GetxController {
       final now = DateTime.now();
 
       final sehriTime = _parseTime(data.sehriLast);
+      final iftarTime = _parseTime(data.iftarStart);
 
-      if (now.isAfter(sehriTime)) {
-        remainingSehriTime.value = "Sehri Time Passed";
+      /// =========================
+      /// 1. BEFORE SEHRI ENDS
+      /// =========================
+      if (now.isBefore(sehriTime)) {
+        final diff = sehriTime.difference(now);
+
+        remainingTimeText.value =
+        "Sehri Ends In: ${_formatDuration(diff)}";
         return;
       }
 
-      final diff = sehriTime.difference(now);
+      /// =========================
+      /// 2. AFTER SEHRI → BEFORE IFTAR
+      /// =========================
+      if (now.isAfter(sehriTime) && now.isBefore(iftarTime)) {
+        final diff = iftarTime.difference(now);
 
-      remainingSehriTime.value =
-      "${diff.inHours.toString().padLeft(2, '0')}:"
-          "${(diff.inMinutes % 60).toString().padLeft(2, '0')}:"
-          "${(diff.inSeconds % 60).toString().padLeft(2, '0')}";
+        remainingTimeText.value =
+        "${_formatDuration(diff)}";
+        return;
+      }
+
+      /// =========================
+      /// 3. AFTER IFTAR → NEXT SEHRI
+      /// =========================
+      final nextSehri = sehriTime.add(const Duration(days: 1));
+      final diff = nextSehri.difference(now);
+
+      remainingTimeText.value =
+      "Sehri Tomorrow In: ${_formatDuration(diff)}";
+
     } catch (e) {
       print("Remaining calc error: $e");
     }
@@ -397,6 +419,11 @@ class HomeController extends GetxController {
       parsed.hour,
       parsed.minute,
     );
+  }
+  String _formatDuration(Duration diff) {
+    return "${diff.inHours.toString().padLeft(2, '0')}:"
+        "${(diff.inMinutes % 60).toString().padLeft(2, '0')}:"
+        "${(diff.inSeconds % 60).toString().padLeft(2, '0')}";
   }
 
 }

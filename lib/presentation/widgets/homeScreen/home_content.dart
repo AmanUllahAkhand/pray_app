@@ -244,7 +244,7 @@ class HomeContent extends StatelessWidget {
                   SehriIftarInfoCard(
                     sehriEnd: ctrl.ramadanTime.value?.sehriLast ?? "--",
                     iftarStart: ctrl.ramadanTime.value?.iftarStart ?? "--",
-                    remainingSehri: ctrl.remainingSehriTime.value,
+                    remainingSehri: ctrl.remainingTimeText.value,
                     onSehriAlarmTap: () {},
                     onIftarAlarmTap: () {},
                   ),

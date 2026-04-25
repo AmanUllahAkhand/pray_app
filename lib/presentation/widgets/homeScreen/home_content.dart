@@ -120,39 +120,47 @@ class HomeContent extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                CustomText(
-                                  text: ctrl.currentPrayer.value,
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.w400,
-                                  color: backgroundColor,
-                                ),
-                                const SizedBox(width: 8),
-                                SvgPicture.asset(
-                                  ctrl.getPrayerIcon(
-                                      ctrl.currentPrayer.value),
-                                  width: 24,
-                                  height: 24,
-                                ),
+                                Obx(() {
+                                  final prayerName = ctrl.getActivePrayerName();
+
+                                  return Row(
+                                    children: [
+                                      CustomText(
+                                        text: prayerName,
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.w400,
+                                        color: prayerName == "Prohibited Time"
+                                            ? Colors.red
+                                            : backgroundColor,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      if (prayerName != "Prohibited Time")
+                                        SvgPicture.asset(
+                                          ctrl.getPrayerIcon(prayerName),
+                                          width: 24,
+                                          height: 24,
+                                        ),
+                                    ],
+                                  );
+                                }),
                               ],
                             ),
 
                             const SizedBox(height: 6),
 
                             Obx(() {
-                              final parts =
-                              ctrl.currentTime.value.split(' ');
+                              final parts = ctrl.getActivePrayerStartTime().split(' ');
+
                               return Row(
                                 children: [
                                   CustomText(
-                                    text:
-                                    parts.isNotEmpty ? parts[0] : '',
+                                    text: parts.isNotEmpty ? parts[0] : '',
                                     fontSize: 35,
                                     fontWeight: FontWeight.w700,
                                     color: backgroundColor,
                                   ),
                                   CustomText(
-                                    text:
-                                    parts.length > 1 ? parts[1] : '',
+                                    text: parts.length > 1 ? parts[1] : '',
                                     fontSize: 26,
                                     fontWeight: FontWeight.w400,
                                     color: backgroundColor,
@@ -169,14 +177,19 @@ class HomeContent extends StatelessWidget {
                             }),
 
                             const SizedBox(height: 6),
+                            Obx(() {
+                              final isProhibited =
+                                  ctrl.getActivePrayerName() == "Prohibited Time";
 
-                            CustomText(
-                              text:
-                              "Time Left: ${ctrl.timeLeft.value} (Approx)",
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: backgroundColor,
-                            ),
+                              return CustomText(
+                                text: isProhibited
+                                    ? "Next Namaz: ${ctrl.timeLeft.value} (Approx)"
+                                    : "Time Left: ${ctrl.timeLeft.value} (Approx)",
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: backgroundColor,
+                              );
+                            }),
                           ],
                         ),
                       ),

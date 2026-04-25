@@ -1,11 +1,14 @@
 import 'dart:async';
+import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pray_app/domain/entities/prayer_time.dart';
 import 'package:pray_app/domain/usecases/get_prayer_times.dart';
 import 'package:pray_app/presentation/controllers/location_controller.dart';
+import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_icons.dart';
 import '../../data/datasources/home_prayer_api_service.dart';
 import '../../data/datasources/location_info_service.dart';
@@ -298,6 +301,39 @@ class HomeController extends GetxController {
     final end = range["end"]!;
 
     return now.isAfter(start) && now.isBefore(end);
+  }
+  String getActivePrayerName() {
+    final now = DateTime.now();
+
+    for (final entry in prayerDateRanges.entries) {
+      final start = entry.value["start"]!;
+      final end = entry.value["end"]!;
+
+      if (now.isAfter(start) && now.isBefore(end)) {
+        return entry.key;
+      }
+    }
+
+    return "Prohibited Time";
+  }
+  String getActivePrayerStartTime() {
+    final now = DateTime.now();
+
+    for (final entry in prayerDateRanges.entries) {
+      final start = entry.value["start"]!;
+      final end = entry.value["end"]!;
+
+      if (now.isAfter(start) && now.isBefore(end)) {
+        return DateFormat('hh:mm a').format(start);
+      }
+    }
+
+    return "--:--";
+  }
+  Color getActivePrayerColor() {
+    return getActivePrayerName() == "Prohibited Time"
+        ? Colors.red
+        : backgroundColor;
   }
 
 }

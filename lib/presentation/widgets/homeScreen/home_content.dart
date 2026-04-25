@@ -28,18 +28,26 @@ class HomeContent extends StatelessWidget {
         );
       }
 
+      /// 🔥 Compute once (IMPORTANT)
+      final prayerName = ctrl.getActivePrayerName();
+      final isProhibited = prayerName == "Prohibited Time";
+      final startParts =
+      ctrl.getActivePrayerStartTime().split(' ');
+
       return SingleChildScrollView(
         child: Column(
           children: [
-            // ================= TOP GREEN SECTION =================
+            /// ================= TOP SECTION =================
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 16, vertical: 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Location + Support
+                  /// 🔹 Location + Support
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
                         onTap: () {
@@ -53,26 +61,30 @@ class HomeContent extends StatelessWidget {
                               height: 24,
                             ),
                             const SizedBox(width: 8),
-                            Obx(() => CustomText(
+                            CustomText(
                               text: ctrl.cityName.value.isNotEmpty
                                   ? "${ctrl.cityName.value}, ${ctrl.countryName.value}"
                                   : "Set location",
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
                               color: backgroundColor,
-                            )),
+                            ),
                           ],
                         ),
                       ),
+
                       ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
                           backgroundColor: dragonBayColor,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius:
+                            BorderRadius.circular(20),
                           ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
+                          padding:
+                          const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8),
                         ),
                         child: Row(
                           children: [
@@ -96,117 +108,122 @@ class HomeContent extends StatelessWidget {
 
                   const SizedBox(height: 8),
 
-                  // Hijri Date
-                  Obx(() => CustomText(
+                  /// 🔹 Hijri Date
+                  CustomText(
                     text: ctrl.hijriDate.value.isNotEmpty
-                        ? ctrl.formatHijriDate(ctrl.hijriDate.value)
+                        ? ctrl.formatHijriDate(
+                        ctrl.hijriDate.value)
                         : "Loading...",
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                     color: backgroundColor,
-                  )),
+                  ),
 
                   const SizedBox(height: 6),
 
-                  // Prayer + Boy
+                  /// 🔹 Prayer Section
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment:
+                    CrossAxisAlignment.start,
                     children: [
-                      // Left
                       Expanded(
                         flex: 7,
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment:
+                          CrossAxisAlignment.start,
                           children: [
+                            /// Prayer Name + Icon
                             Row(
                               children: [
-                                Obx(() {
-                                  final prayerName = ctrl.getActivePrayerName();
-
-                                  return Row(
-                                    children: [
-                                      CustomText(
-                                        text: prayerName,
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.w400,
-                                        color: prayerName == "Prohibited Time"
-                                            ? Colors.red
-                                            : backgroundColor,
-                                      ),
-                                      const SizedBox(width: 8),
-                                      if (prayerName != "Prohibited Time")
-                                        SvgPicture.asset(
-                                          ctrl.getPrayerIcon(prayerName),
-                                          width: 24,
-                                          height: 24,
-                                        ),
-                                    ],
-                                  );
-                                }),
+                                CustomText(
+                                  text: prayerName,
+                                  fontSize: 28,
+                                  fontWeight:
+                                  FontWeight.w400,
+                                  color: isProhibited
+                                      ? Colors.red
+                                      : backgroundColor,
+                                ),
+                                const SizedBox(width: 8),
+                                if (!isProhibited)
+                                  SvgPicture.asset(
+                                    ctrl.getPrayerIcon(
+                                        prayerName),
+                                    width: 24,
+                                    height: 24,
+                                  ),
                               ],
                             ),
 
                             const SizedBox(height: 6),
 
-                            Obx(() {
-                              final parts = ctrl.getActivePrayerStartTime().split(' ');
-
-                              return Row(
-                                children: [
-                                  CustomText(
-                                    text: parts.isNotEmpty ? parts[0] : '',
-                                    fontSize: 35,
-                                    fontWeight: FontWeight.w700,
-                                    color: backgroundColor,
-                                  ),
-                                  CustomText(
-                                    text: parts.length > 1 ? parts[1] : '',
-                                    fontSize: 26,
-                                    fontWeight: FontWeight.w400,
-                                    color: backgroundColor,
-                                  ),
-                                  const SizedBox(width: 6),
-                                  const CustomText(
-                                    text: "(Start Time)",
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w400,
-                                    color: backgroundColor,
-                                  ),
-                                ],
-                              );
-                            }),
+                            /// Start Time
+                            Row(
+                              children: [
+                                CustomText(
+                                  text: startParts.isNotEmpty
+                                      ? startParts[0]
+                                      : '',
+                                  fontSize: 35,
+                                  fontWeight:
+                                  FontWeight.w700,
+                                  color: backgroundColor,
+                                ),
+                                CustomText(
+                                  text:
+                                  startParts.length > 1
+                                      ? startParts[1]
+                                      : '',
+                                  fontSize: 26,
+                                  fontWeight:
+                                  FontWeight.w400,
+                                  color: backgroundColor,
+                                ),
+                                const SizedBox(width: 6),
+                                const CustomText(
+                                  text: "(Start Time)",
+                                  fontSize: 13,
+                                  fontWeight:
+                                  FontWeight.w400,
+                                  color: backgroundColor,
+                                ),
+                              ],
+                            ),
 
                             const SizedBox(height: 6),
-                            Obx(() {
-                              final isProhibited =
-                                  ctrl.getActivePrayerName() == "Prohibited Time";
 
-                              return CustomText(
-                                text: isProhibited
-                                    ? "Next Namaz: ${ctrl.timeLeft.value} (Approx)"
-                                    : "Time Left: ${ctrl.timeLeft.value} (Approx)",
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: backgroundColor,
-                              );
-                            }),
+                            /// Time Label
+                            CustomText(
+                              text: isProhibited
+                                  ? "Next Namaz: ${ctrl.timeLeft.value} (Approx)"
+                                  : "Time Left: ${ctrl.timeLeft.value} (Approx)",
+                              fontSize: 14,
+                              fontWeight:
+                              FontWeight.w400,
+                              color: backgroundColor,
+                            ),
                           ],
                         ),
                       ),
 
+                      /// Boy Image
                       Expanded(
-                          flex: 4,
-                          child: SvgPicture.asset(AppIcons.boy)
+                        flex: 4,
+                        child:
+                        SvgPicture.asset(AppIcons.boy),
                       ),
                     ],
                   ),
-                  // Prayer Times Card
+
+                  const SizedBox(height: 10),
+
+                  /// 🔹 Prayer Times Row
                   _buildPrayerTimesRow(ctrl),
                 ],
               ),
             ),
 
-            // ================= WHITE CARD SECTION =================
+            /// ================= WHITE SECTION =================
             Container(
               width: double.infinity,
               decoration: const BoxDecoration(
@@ -216,13 +233,14 @@ class HomeContent extends StatelessWidget {
                   topRight: Radius.circular(30),
                 ),
               ),
-              padding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 16, vertical: 20),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment:
+                CrossAxisAlignment.start,
                 children: [
-                  // Feature Buttons
                   const FeatureButtonGrid(),
+
                   SehriIftarInfoCard(
                     sehriEnd: "05:24 AM",
                     iftarStart: "05:38 PM",
@@ -230,11 +248,13 @@ class HomeContent extends StatelessWidget {
                     onSehriAlarmTap: () {},
                     onIftarAlarmTap: () {},
                   ),
+
                   const SizedBox(height: 20),
-                  // ImageFeatureCardsSection
+
                   const ImageFeatureCardsSection(),
+
                   const SizedBox(height: 20),
-                  // Prohibited Times
+
                   const ProhibitedTimesSection(),
                 ],
               ),
@@ -245,6 +265,7 @@ class HomeContent extends StatelessWidget {
     });
   }
 
+  /// 🔥 Prayer Times Row
   Widget _buildPrayerTimesRow(HomeController ctrl) {
     final names = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
 
@@ -255,10 +276,12 @@ class HomeContent extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment:
+        MainAxisAlignment.spaceBetween,
         children: List.generate(names.length, (index) {
           final name = names[index];
-          final isActive = ctrl.isPrayerTimeActive(name);
+          final isActive =
+          ctrl.isPrayerTimeActive(name);
 
           return PrayerTimeCard(
             name: name,

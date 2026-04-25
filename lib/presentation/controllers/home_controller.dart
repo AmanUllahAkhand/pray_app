@@ -90,7 +90,6 @@ class HomeController extends GetxController {
     try {
       final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
-      // 🔥 API CALL
       final apiData = await homePrayerApi.fetchPrayerTimes(
         lat: position.latitude,
         lng: position.longitude,
@@ -100,6 +99,7 @@ class HomeController extends GetxController {
       if (apiData != null) {
         homePrayerTimes.value = apiData;
 
+        // ✅ TEXT RANGE
         prayerRanges.value = {
           "Fajr":
           "${formatToAmPm(apiData.fajr.start)} – ${formatToAmPm(apiData.fajr.end)}",
@@ -113,32 +113,16 @@ class HomeController extends GetxController {
           "${formatToAmPm(apiData.isha.start)} – ${formatToAmPm(apiData.isha.end)}",
         };
 
-        // ✅ NEW: store actual DateTime ranges
+        // ✅ DATE RANGE (FIXED)
         prayerDateRanges.value = {
-          "Fajr": {
-            "start": parseToDateTime(apiData.fajr.start),
-            "end": parseToDateTime(apiData.fajr.end),
-          },
-          "Dhuhr": {
-            "start": parseToDateTime(apiData.dhuhr.start),
-            "end": parseToDateTime(apiData.dhuhr.end),
-          },
-          "Asr": {
-            "start": parseToDateTime(apiData.asr.start),
-            "end": parseToDateTime(apiData.asr.end),
-          },
-          "Maghrib": {
-            "start": parseToDateTime(apiData.maghrib.start),
-            "end": parseToDateTime(apiData.maghrib.end),
-          },
-          "Isha": {
-            "start": parseToDateTime(apiData.isha.start),
-            "end": parseToDateTime(apiData.isha.end),
-          },
+          "Fajr": parseRange(apiData.fajr.start, apiData.fajr.end),
+          "Dhuhr": parseRange(apiData.dhuhr.start, apiData.dhuhr.end),
+          "Asr": parseRange(apiData.asr.start, apiData.asr.end),
+          "Maghrib": parseRange(apiData.maghrib.start, apiData.maghrib.end),
+          "Isha": parseRange(apiData.isha.start, apiData.isha.end),
         };
       }
 
-      // OPTIONAL: keep existing logic
       final times = await getPrayerTimesUseCase.call(position, DateTime.now());
       prayerTime.value = times;
 
@@ -149,6 +133,38 @@ class HomeController extends GetxController {
     }
   }
 
+  Map<String, DateTime> parseRange(String startStr, String endStr) {
+    final now = DateTime.now();
+
+    final startParsed = DateFormat("HH:mm").parse(startStr);
+    final endParsed = DateFormat("HH:mm").parse(endStr);
+
+    DateTime start = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      startParsed.hour,
+      startParsed.minute,
+    );
+
+    DateTime end = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      endParsed.hour,
+      endParsed.minute,
+    );
+
+    // ✅ FIX: handle cross midnight (Isha case)
+    if (end.isBefore(start)) {
+      end = end.add(const Duration(days: 1));
+    }
+
+    return {
+      "start": start,
+      "end": end,
+    };
+  }
 
   void updateCurrentPrayerAndTimeLeft() {
     final now = DateTime.now();
@@ -323,7 +339,6 @@ class HomeController extends GetxController {
       parsed.minute,
     );
   }
-
   bool isPrayerTimeActive(String name) {
     final range = prayerDateRanges[name];
     if (range == null) return false;
@@ -410,7 +425,7 @@ class HomeController extends GetxController {
 
       remainingLabel.value = "Remaining Sehri";
       remainingTimeText.value =
-      "Sehri Tomorrow In: ${_formatDuration(diff)}";
+      "${_formatDuration(diff)}";
 
     } catch (e) {
       print("Remaining calc error: $e");

@@ -23,6 +23,7 @@ class HomeController extends GetxController {
   var timeLeft = ''.obs;
   var prohibitedTimes = <String, String>{}.obs;
   var prayerRanges = <String, String>{}.obs;
+  var prayerDateRanges = <String, Map<String, DateTime>>{}.obs;
   // Navigation
   final selectedIndex = 0.obs;
   final currentTime = ''.obs;
@@ -85,7 +86,6 @@ class HomeController extends GetxController {
       if (apiData != null) {
         homePrayerTimes.value = apiData;
 
-        // map API → UI ranges
         prayerRanges.value = {
           "Fajr":
           "${formatToAmPm(apiData.fajr.start)} – ${formatToAmPm(apiData.fajr.end)}",
@@ -97,6 +97,30 @@ class HomeController extends GetxController {
           "${formatToAmPm(apiData.maghrib.start)} – ${formatToAmPm(apiData.maghrib.end)}",
           "Isha":
           "${formatToAmPm(apiData.isha.start)} – ${formatToAmPm(apiData.isha.end)}",
+        };
+
+        // ✅ NEW: store actual DateTime ranges
+        prayerDateRanges.value = {
+          "Fajr": {
+            "start": parseToDateTime(apiData.fajr.start),
+            "end": parseToDateTime(apiData.fajr.end),
+          },
+          "Dhuhr": {
+            "start": parseToDateTime(apiData.dhuhr.start),
+            "end": parseToDateTime(apiData.dhuhr.end),
+          },
+          "Asr": {
+            "start": parseToDateTime(apiData.asr.start),
+            "end": parseToDateTime(apiData.asr.end),
+          },
+          "Maghrib": {
+            "start": parseToDateTime(apiData.maghrib.start),
+            "end": parseToDateTime(apiData.maghrib.end),
+          },
+          "Isha": {
+            "start": parseToDateTime(apiData.isha.start),
+            "end": parseToDateTime(apiData.isha.end),
+          },
         };
       }
 
@@ -250,6 +274,30 @@ class HomeController extends GetxController {
     } catch (e) {
       print("Location name error: $e");
     }
+  }
+
+  DateTime parseToDateTime(String time) {
+    final now = DateTime.now();
+    final parsed = DateFormat("HH:mm").parse(time);
+
+    return DateTime(
+      now.year,
+      now.month,
+      now.day,
+      parsed.hour,
+      parsed.minute,
+    );
+  }
+
+  bool isPrayerTimeActive(String name) {
+    final range = prayerDateRanges[name];
+    if (range == null) return false;
+
+    final now = DateTime.now();
+    final start = range["start"]!;
+    final end = range["end"]!;
+
+    return now.isAfter(start) && now.isBefore(end);
   }
 
 }

@@ -245,7 +245,7 @@ class HomeContent extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: List.generate(names.length, (index) {
           final name = names[index];
-          final isActive = ctrl.currentPrayer.value == name;
+          final isActive = ctrl.isPrayerTimeActive(name);
 
           return PrayerTimeCard(
             name: name,

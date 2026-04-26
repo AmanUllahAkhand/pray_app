@@ -5,18 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:table_calendar/table_calendar.dart';
 
-/// Model for the Islamic Events
-import 'dart:convert';
-import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
-import 'package:table_calendar/table_calendar.dart';
-import 'package:hijri/hijri_calendar.dart';
-
 class IslamicEventModel {
   final String title;
-  final String hijriDate;    // Format: "10-01-1448"
-  final String gregorianDate; // Format: "25-06-2026"
+  final String hijriDate;
+  final String gregorianDate;
 
   IslamicEventModel({
     required this.title,

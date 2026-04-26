@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:pray_app/core/constants/app_colors.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:hijri/hijri_calendar.dart';
+import 'package:table_calendar/table_calendar.dart';
 import '../../core/constants/app_icons.dart';
 import '../controllers/calendar_controller.dart';
 import '../widgets/custom_text.dart';
-
 
 class CalendarScreen extends GetView<CalendarController> {
   const CalendarScreen({super.key});
@@ -15,13 +13,13 @@ class CalendarScreen extends GetView<CalendarController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: Colors.white, // Or your backgroundColor constant
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment(0.50, 0.81),
             end: Alignment(0.50, -0.38),
-            colors: [const Color(0x00086055), const Color(0xFF96D9CC)],
+            colors: [Color(0x00086055), Color(0xFF96D9CC)],
           ),
         ),
         child: SafeArea(
@@ -44,7 +42,6 @@ class CalendarScreen extends GetView<CalendarController> {
       child: Row(
         children: [
           const Icon(Icons.arrow_back),
-
           const SizedBox(width: 8),
 
           /// Month Dropdown
@@ -52,20 +49,15 @@ class CalendarScreen extends GetView<CalendarController> {
             return DropdownButtonHideUnderline(
               child: DropdownButton<int>(
                 value: controller.selectedHijriMonth.value,
-
-                /// 🔹 Dropdown items (Hijri only)
                 items: List.generate(
                   controller.hijriMonths.length,
                       (index) => DropdownMenuItem<int>(
                     value: index + 1,
                     child: CustomText(
-                      text:
-                      "${controller.hijriMonths[index]}, ${controller.selectedHijriYear.value}",
+                      text: "${controller.hijriMonths[index]}, ${controller.selectedHijriYear.value}",
                     ),
                   ),
                 ),
-
-                /// 🔹 Selected item (Hijri + Gregorian)
                 selectedItemBuilder: (context) {
                   return List.generate(
                     controller.hijriMonths.length,
@@ -86,7 +78,6 @@ class CalendarScreen extends GetView<CalendarController> {
                     ),
                   );
                 },
-
                 onChanged: (value) {
                   if (value != null) {
                     controller.onHijriMonthChanged(value);
@@ -99,11 +90,7 @@ class CalendarScreen extends GetView<CalendarController> {
           const Spacer(),
 
           /// Filter Icon
-          SvgPicture.asset(
-            AppIcons.filter,
-            height: 22,
-          ),
-
+          SvgPicture.asset(AppIcons.filter, height: 22),
           const SizedBox(width: 12),
 
           /// Islamic / English Toggle
@@ -121,7 +108,6 @@ class CalendarScreen extends GetView<CalendarController> {
     );
   }
 
-
   /// 📅 Calendar
   Widget _calendar() {
     return Obx(() {
@@ -129,113 +115,122 @@ class CalendarScreen extends GetView<CalendarController> {
         firstDay: DateTime(2020),
         lastDay: DateTime(2030),
         focusedDay: controller.focusedDay.value,
-
-        selectedDayPredicate: (day) =>
-            isSameDay(controller.selectedDay.value, day),
-
+        selectedDayPredicate: (day) => isSameDay(controller.selectedDay.value, day),
         onDaySelected: controller.onDaySelected,
-
         headerVisible: false,
         daysOfWeekHeight: 28,
         rowHeight: 54,
-
         calendarStyle: const CalendarStyle(
           outsideDaysVisible: false,
         ),
-
         calendarBuilders: CalendarBuilders(
           defaultBuilder: (context, day, _) {
-            return _dayCell(day);
+            return _dayCell(day, hasEvent: controller.hasEvent(day));
           },
-
-          /// Selected Day UI
           selectedBuilder: (context, day, _) {
-            return _dayCell(
-              day,
-              isSelected: true,
-            );
+            return _dayCell(day, isSelected: true, hasEvent: controller.hasEvent(day));
           },
-
-          /// Today UI
           todayBuilder: (context, day, _) {
-            return _dayCell(
-              day,
-              isToday: true,
-            );
+            return _dayCell(day, isToday: true, hasEvent: controller.hasEvent(day));
           },
         ),
       );
     });
   }
 
-
   /// 📜 Event List
   Widget _eventList() {
     return Expanded(
-      child: ListView(
-        padding: const EdgeInsets.all(16),
-        children: const [
-          CustomText(
-            text: "Islamic Event",
-            fontWeight: FontWeight.w600,
-          ),
-          SizedBox(height: 12),
-          _EventTile(
-            title: "Ashura",
-            hijri: "10 Muharram, 1447",
-            date: "17 July, 2025",
-          ),
-          _EventTile(
-            title: "Prophet Muhammad’s Birthday",
-            hijri: "12 Rabi al-Awwal, 1447",
-            date: "28 September, 2025",
-          ),
-          _EventTile(
-            title: "Ashura",
-            hijri: "10 Muharram, 1447",
-            date: "17 July, 2025",
-          ),
-          _EventTile(
-            title: "Ashura",
-            hijri: "10 Muharram, 1447",
-            date: "17 July, 2025",
-          ),
-          _EventTile(
-            title: "Ashura",
-            hijri: "10 Muharram, 1447",
-            date: "17 July, 2025",
-          ),
-          _EventTile(
-            title: "Ashura",
-            hijri: "10 Muharram, 1447",
-            date: "17 July, 2025",
-          ),
-          _EventTile(
-            title: "Ashura",
-            hijri: "10 Muharram, 1447",
-            date: "17 July, 2025",
-          ),
-          _EventTile(
-            title: "Ashura",
-            hijri: "10 Muharram, 1447",
-            date: "17 July, 2025",
-          ),
-          _EventTile(
-            title: "Ashura",
-            hijri: "10 Muharram, 1447",
-            date: "17 July, 2025",
-          ),
-          _EventTile(
-            title: "Ashura",
-            hijri: "10 Muharram, 1447",
-            date: "17 July, 2025",
-          ),
-          _EventTile(
-            title: "Ashura",
-            hijri: "10 Muharram, 1447",
-            date: "17 July, 2025",
+      child: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        return ListView.builder(
+          padding: const EdgeInsets.all(16),
+          itemCount: controller.events.length + 1,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return const Padding(
+                padding: EdgeInsets.only(bottom: 12),
+                child: CustomText(text: "Islamic Event", fontWeight: FontWeight.w600),
+              );
+            }
+
+            final event = controller.events[index - 1];
+
+            // Calling the Widget Class and the new Model Getters
+            return _EventTile(
+              title: event.title,
+              hijri: event.formattedHijri,
+              date: event.formattedGregorian,
+            );
+          },
+        );
+      }),
+    );
+  }
+
+  /// 🗓️ Custom Day Cell with Event Marker
+  Widget _dayCell(
+      DateTime day, {
+        bool isSelected = false,
+        bool isToday = false,
+        bool hasEvent = false,
+      }) {
+    final hijri = HijriCalendar.fromDate(day);
+
+    Color bgColor = Colors.transparent;
+    Color hijriColor = Colors.black;
+    Color gregorianColor = Colors.grey;
+
+    if (isSelected) {
+      bgColor = Get.theme.primaryColor;
+      hijriColor = Colors.white;
+      gregorianColor = Colors.white70;
+    } else if (isToday) {
+      bgColor = Get.theme.primaryColor.withOpacity(0.12);
+      hijriColor = Get.theme.primaryColor;
+    }
+
+    return Container(
+      margin: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomText(
+                text: hijri.hDay.toString(),
+                fontWeight: FontWeight.bold,
+                color: hijriColor,
+              ),
+              CustomText(
+                text: day.day.toString(),
+                fontSize: 11,
+                color: gregorianColor,
+              ),
+            ],
           ),
 
+          /// Event Marker (Dot)
+          if (hasEvent)
+            Positioned(
+              bottom: 4,
+              child: Container(
+                height: 4,
+                width: 4,
+                decoration: BoxDecoration(
+                  color: isSelected ? Colors.white : const Color(0xff0A8F79),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -263,7 +258,7 @@ class _EventTile extends StatelessWidget {
             height: 10,
             width: 10,
             decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
+              color: const Color(0xff0A8F79),
               borderRadius: BorderRadius.circular(3),
             ),
           ),
@@ -272,7 +267,7 @@ class _EventTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomText(text: title),
+                CustomText(text: title, fontWeight: FontWeight.w500),
                 CustomText(
                   text: hijri,
                   fontSize: 11,
@@ -284,6 +279,7 @@ class _EventTile extends StatelessWidget {
           CustomText(
             text: date,
             fontSize: 11,
+            color: Colors.grey.shade600,
           ),
         ],
       ),
@@ -291,49 +287,3 @@ class _EventTile extends StatelessWidget {
   }
 }
 
-Widget _dayCell(
-    DateTime day, {
-      bool isSelected = false,
-      bool isToday = false,
-    }) {
-  final hijri = HijriCalendar.fromDate(day);
-
-  Color bgColor = Colors.transparent;
-  Color hijriColor = Colors.black;
-  Color gregorianColor = Colors.grey;
-
-  if (isSelected) {
-    bgColor = Get.theme.primaryColor;
-    hijriColor = Colors.white;
-    gregorianColor = Colors.white70;
-  } else if (isToday) {
-    bgColor = Get.theme.primaryColor.withOpacity(0.12);
-    hijriColor = Get.theme.primaryColor;
-  }
-
-  return Container(
-    margin: const EdgeInsets.all(4),
-    decoration: BoxDecoration(
-      color: bgColor,
-      borderRadius: BorderRadius.circular(8),
-    ),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        /// Hijri Date (Bold)
-        CustomText(
-          text: hijri.hDay.toString(),
-          fontWeight: FontWeight.bold,
-          color: hijriColor,
-        ),
-
-        /// Gregorian Date
-        CustomText(
-          text: day.day.toString(),
-          fontSize: 11,
-          color: gregorianColor,
-        ),
-      ],
-    ),
-  );
-}

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import '../../core/routes/app_routes.dart';
 import '../../data/datasources/Quran/quran_api_service.dart';
 import '../../data/models/quran/sura_model.dart';
 
@@ -70,6 +71,12 @@ class QuranController extends GetxController {
   }
 
   void onSuraTap(SuraModel sura) {
-    Get.toNamed('/sura-details', arguments: sura);
+    Get.toNamed(
+      AppRoutes.sura,
+      arguments: {
+        'id': sura.id,
+        'name': sura.nameEn,
+      },
+    );
   }
 }

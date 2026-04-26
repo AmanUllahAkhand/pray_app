@@ -5,6 +5,6 @@ import '../controllers/sura_controller.dart';
 class SuraBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<SuraController>(() => SuraController());
+    Get.lazyPut(() => SuraController());
   }
 }

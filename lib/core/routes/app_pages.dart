@@ -96,7 +96,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.sura,
-      page: () => SuraScreen(),
+      page: () => const SuraScreen(),
       binding: SuraBinding(),
     ),
   ];

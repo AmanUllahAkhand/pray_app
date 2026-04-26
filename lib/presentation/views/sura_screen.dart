@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:get/get.dart';
 import 'package:pray_app/core/constants/app_colors.dart';
 import '../../core/constants/app_icons.dart';
 import '../controllers/sura_controller.dart';
@@ -14,19 +13,19 @@ class SuraScreen extends GetView<SuraController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
+
+      /// ================= APP BAR =================
       appBar: AppBar(
         centerTitle: true,
-        title: const CustomText(
-          text: 'Al-Faatiha',
+        title: Obx(() => CustomText(
+          text: controller.suraName.value,
           fontSize: 18,
           fontWeight: FontWeight.w600,
-        ),
+        )),
         leading: const BackButton(),
         actions: [
           IconButton(
-            onPressed: () {
-              // TODO: menu action
-            },
+            onPressed: () {},
             icon: SvgPicture.asset(
               AppIcons.menuBook,
               height: 22,
@@ -34,124 +33,159 @@ class SuraScreen extends GetView<SuraController> {
             ),
           ),
         ],
-
       ),
-      body: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            margin: const EdgeInsets.all(16),
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              image: const DecorationImage(
-                image: AssetImage('assets/images/quran_banner.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: const Column(
-              children: [
-                CustomText(
-                  text: 'Surah Al-Fatihah',
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xff0A8F79),
-                ),
-                SizedBox(height: 4),
-                CustomText(
-                  text: 'Meccan | 7 Ayahs',
-                  fontSize: 12,
-                  color: Colors.grey,
-                ),
-                SizedBox(height: 12),
-                CustomText(
-                  text: 'بِسْمِ ٱللَّٰهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ',
-                  fontSize: 20,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: controller.ayahs.length,
-              itemBuilder: (context, index) {
-                final ayah = controller.ayahs[index];
+
+      /// ================= BODY =================
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        return NotificationListener<ScrollNotification>(
+          onNotification: (scrollInfo) {
+            if (scrollInfo.metrics.pixels ==
+                scrollInfo.metrics.maxScrollExtent) {
+              controller.loadMore();
+            }
+            return false;
+          },
+
+          child: ListView.builder(
+            itemCount: controller.ayahs.length +
+                (controller.isLoadMore.value ? 1 : 0) +
+                1,
+
+            itemBuilder: (context, index) {
+
+              /// ================= BANNER =================
+              if (index == 0) {
                 return Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  width: double.infinity,
+                  margin: const EdgeInsets.all(16),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey.shade300),
+                    borderRadius: BorderRadius.circular(16),
+                    image: const DecorationImage(
+                      image: AssetImage('assets/images/sura_details.png'),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              // play action
-                            },
-                            child: SvgPicture.asset(
-                              AppIcons.play,
-                              height: 22,
-                              width: 22,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          GestureDetector(
-                            onTap: () {
-                              // bookmark action
-                            },
-                            child: SvgPicture.asset(
-                              AppIcons.bookmark,
-                              height: 20,
-                              width: 20,
-                            ),
-                          ),
-                        ],
+                      CustomText(
+                        text: 'Surah ${controller.suraName}',
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xff0A8F79),
                       ),
-
+                      const SizedBox(height: 4),
+                      CustomText(
+                        text:
+                        '${controller.revelation} | ${controller.totalAyah} Ayahs',
+                        fontSize: 12,
+                        color: Colors.grey,
+                      ),
                       const SizedBox(height: 12),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch, // ⭐ important
-                        children: [
-                          // Arabic (Right)
-                          CustomText(
-                            text: ayah['arabic']!,
-                            fontSize: 22,
-                            textAlign: TextAlign.right,
+
+                      /// Bismillah
+                      const Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: Text(
+                          'بِسْمِ ٱللَّٰهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: 'Amiri',
                           ),
-
-                          const SizedBox(height: 6),
-
-                          // Latin (Left)
-                          CustomText(
-                            text: ayah['latin']!,
-                            fontSize: 13,
-                            textAlign: TextAlign.left,
-                          ),
-
-                          const SizedBox(height: 4),
-
-                          // Bangla (Left)
-                          CustomText(
-                            text: ayah['bn']!,
-                            fontSize: 13,
-                            textAlign: TextAlign.left,
-                          ),
-                        ],
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ],
                   ),
                 );
-              },
-            ),
-          )
-        ],
-      ),
+              }
+
+              /// ================= INDEX FIX =================
+              final realIndex = index - 1;
+
+              /// ================= LOADER =================
+              if (realIndex == controller.ayahs.length) {
+                return const Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              final ayah = controller.ayahs[realIndex];
+
+              /// ================= AYAH ITEM =================
+              return Container(
+                margin:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.grey.shade300),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    /// ACTIONS
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SvgPicture.asset(AppIcons.play, height: 22),
+                        const SizedBox(width: 12),
+                        SvgPicture.asset(AppIcons.bookmark, height: 20),
+                      ],
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    /// ================= ARABIC =================
+                    Container(
+                      width: double.infinity,
+                      alignment: Alignment.centerRight,
+                      child: Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: Text(
+                          '${ayah.arabic}  ۝ ${ayah.ayah}',
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontFamily: 'Amiri',
+                          ),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 6),
+
+                    /// ================= TRANSLITERATION =================
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: CustomText(
+                        text: ayah.transliteration,
+                        fontSize: 13,
+                      ),
+                    ),
+
+                    const SizedBox(height: 4),
+
+                    /// ================= BANGLA =================
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: CustomText(
+                        text: ayah.bangla,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        );
+      }),
     );
   }
 }

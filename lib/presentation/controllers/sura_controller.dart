@@ -1,32 +1,75 @@
+import 'dart:convert';
 import 'package:get/get.dart';
-
+import 'package:http/http.dart' as http;
+import '../../data/models/quran/sura_details_model.dart';
 
 class SuraController extends GetxController {
-  final ayahs = [
-    {
-      'arabic': 'بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ',
-      'latin': 'bismillahir-rahmanir-rahim',
-      'bn': '(আল্লাহর নামে) যিনি পরম করুণাময়, অতি দয়ালু',
-    },
-    {
-      'arabic': 'الْحَمْدُ لِلّٰهِ رَبِّ الْعَالَمِيْنَ',
-      'latin': 'al-hamdu lillahi rabbil-alamin',
-      'bn': 'সমস্ত প্রশংসা আল্লাহর জন্য, যিনি সকল জগতের পালনকর্তা',
-    },
-    {
-      'arabic': 'الرَّحْمٰنِ الرَّحِيْمِ',
-      'latin': 'ar-rahmanir-rahim',
-      'bn': 'তিনি পরম করুণাময়, অতি দয়ালু',
-    },
-    {
-      'arabic': 'مٰلِكِ يَوْمِ الدِّيْنِ',
-      'latin': 'maliki yawmi ad-din',
-      'bn': 'তিনি বিচার দিনের মালিক',
-    },
-    {
-      'arabic': 'إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِيْنُ',
-      'latin': "iyyaka na'budu wa iyyaka nastaeen",
-      'bn': 'আমরা কেবল তোমারই ইবাদত করি এবং তোমারই সাহায্য চাই',
-    },
-  ];
+  final ayahs = <AyahModel>[].obs;
+
+  var isLoading = false.obs;
+  var isLoadMore = false.obs;
+
+  var revelation = ''.obs;
+  var totalAyah = 0.obs;
+
+  var suraName = ''.obs;
+
+  int page = 1;
+  int totalPages = 1;
+
+  int suraId = 1;
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    final args = Get.arguments;
+    suraId = args['id'];
+
+    suraName.value = args['name']; // ⭐ FIX HERE
+
+    fetchAyahs();
+  }
+
+  Future<void> fetchAyahs({bool loadMore = false}) async {
+    if (loadMore) {
+      if (page > totalPages) return;
+      isLoadMore.value = true;
+    } else {
+      isLoading.value = true;
+      page = 1;
+      ayahs.clear();
+    }
+
+    try {
+      final url =
+          'https://quran-api-production-eeb6.up.railway.app/api/surah-details?id=$suraId&page=$page';
+
+      final res = await http.get(Uri.parse(url));
+
+      if (res.statusCode == 200) {
+        final data = json.decode(res.body);
+
+        final surah = data['surah'];
+
+        revelation.value = surah['revelation'];
+        totalAyah.value = surah['total_ayah'];
+
+        final List list = data['data'];
+
+        ayahs.addAll(list.map((e) => AyahModel.fromJson(e)).toList());
+
+        page++;
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+
+    isLoading.value = false;
+    isLoadMore.value = false;
+  }
+
+  void loadMore() {
+    fetchAyahs(loadMore: true);
+  }
 }

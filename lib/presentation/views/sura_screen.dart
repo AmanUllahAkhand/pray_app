@@ -25,7 +25,10 @@ class SuraScreen extends GetView<SuraController> {
         leading: const BackButton(),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              controller.arabicOnly.value =
+              !controller.arabicOnly.value;
+            },
             icon: SvgPicture.asset(
               AppIcons.menuBook,
               height: 22,
@@ -41,10 +44,32 @@ class SuraScreen extends GetView<SuraController> {
           return const Center(child: CircularProgressIndicator());
         }
 
+        /// ================= ARABIC ONLY MODE =================
+        if (controller.arabicOnly.value) {
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Directionality(
+              textDirection: TextDirection.rtl,
+              child: Text(
+                controller.ayahs
+                    .map((e) => '${e.arabic} ۝ ${e.ayah}')
+                    .join('   '), // spacing FIX
+                textAlign: TextAlign.justify,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontFamily: 'Amiri',
+                  height: 2.2,
+                ),
+              ),
+            ),
+          );
+        }
+
+        /// ================= NORMAL MODE =================
         return NotificationListener<ScrollNotification>(
           onNotification: (scrollInfo) {
-            if (scrollInfo.metrics.pixels ==
-                scrollInfo.metrics.maxScrollExtent) {
+            if (scrollInfo.metrics.pixels >=
+                scrollInfo.metrics.maxScrollExtent - 200) {
               controller.loadMore();
             }
             return false;
@@ -73,21 +98,20 @@ class SuraScreen extends GetView<SuraController> {
                   child: Column(
                     children: [
                       CustomText(
-                        text: 'Surah ${controller.suraName}',
+                        text: 'Surah ${controller.suraName.value}',
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: const Color(0xff0A8F79),
+                        color: Color(0xff0A8F79),
                       ),
                       const SizedBox(height: 4),
                       CustomText(
                         text:
-                        '${controller.revelation} | ${controller.totalAyah} Ayahs',
+                        '${controller.revelation.value} | ${controller.totalAyah.value} Ayahs',
                         fontSize: 12,
                         color: Colors.grey,
                       ),
                       const SizedBox(height: 12),
 
-                      /// Bismillah
                       const Directionality(
                         textDirection: TextDirection.rtl,
                         child: Text(
@@ -104,7 +128,6 @@ class SuraScreen extends GetView<SuraController> {
                 );
               }
 
-              /// ================= INDEX FIX =================
               final realIndex = index - 1;
 
               /// ================= LOADER =================
@@ -129,7 +152,6 @@ class SuraScreen extends GetView<SuraController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    /// ACTIONS
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -142,18 +164,15 @@ class SuraScreen extends GetView<SuraController> {
                     const SizedBox(height: 12),
 
                     /// ================= ARABIC =================
-                    Container(
-                      width: double.infinity,
-                      alignment: Alignment.centerRight,
-                      child: Directionality(
-                        textDirection: TextDirection.rtl,
-                        child: Text(
-                          '${ayah.arabic}  ۝ ${ayah.ayah}',
-                          style: const TextStyle(
-                            fontSize: 22,
-                            fontFamily: 'Amiri',
-                          ),
-                          textAlign: TextAlign.right,
+                    Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: Text(
+                        '${ayah.arabic} ۝ ${ayah.ayah}',
+                        textAlign: TextAlign.justify,
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontFamily: 'Amiri',
+                          height: 2,
                         ),
                       ),
                     ),

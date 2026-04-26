@@ -11,8 +11,9 @@ class SuraController extends GetxController {
 
   var revelation = ''.obs;
   var totalAyah = 0.obs;
-
   var suraName = ''.obs;
+
+  var arabicOnly = false.obs;
 
   int page = 1;
   int totalPages = 1;
@@ -25,8 +26,7 @@ class SuraController extends GetxController {
 
     final args = Get.arguments;
     suraId = args['id'];
-
-    suraName.value = args['name']; // ⭐ FIX HERE
+    suraName.value = args['name'];
 
     fetchAyahs();
   }
@@ -51,15 +51,18 @@ class SuraController extends GetxController {
         final data = json.decode(res.body);
 
         final surah = data['surah'];
-
         revelation.value = surah['revelation'];
         totalAyah.value = surah['total_ayah'];
+
+        totalPages = data['pagination']['total_pages'] ?? 1;
 
         final List list = data['data'];
 
         ayahs.addAll(list.map((e) => AyahModel.fromJson(e)).toList());
 
-        page++;
+        if (page < totalPages) {
+          page++;
+        }
       }
     } catch (e) {
       print('Error: $e');
@@ -70,6 +73,8 @@ class SuraController extends GetxController {
   }
 
   void loadMore() {
-    fetchAyahs(loadMore: true);
+    if (!isLoadMore.value && page <= totalPages) {
+      fetchAyahs(loadMore: true);
+    }
   }
 }

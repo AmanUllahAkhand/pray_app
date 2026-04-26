@@ -135,6 +135,7 @@ class QuranScreen extends StatelessWidget {
                             CustomText(
                               text: sura.nameAr,
                               color: Colors.teal,
+                              fontFamily: 'Amiri',
                             ),
                           ],
                         ),

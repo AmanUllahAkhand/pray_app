@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:hijri/hijri_calendar.dart';
 import '../../core/constants/app_icons.dart';
+import '../../data/models/prayer_time/daily_hadith_model.dart';
 import '../controllers/location_controller.dart';
 import '../../data/models/home/home_prayer_times_model.dart';
 
@@ -19,6 +20,7 @@ class PrayerController extends GetxController {
   final nextPrayerName = '...'.obs;
   final nextPrayerCountdown = '00:00:00'.obs;
   final allNotification = false.obs;
+  final dailyHadith = Rxn<DailyHadithModel>();
 
   Timer? _timer;
   HomePrayerTimesModel? _cachedModel;
@@ -38,7 +40,7 @@ class PrayerController extends GetxController {
     ever(locationCtrl.currentPosition, (pos) {
       if (pos != null) fetchPrayerTimes();
     });
-
+    fetchDailyHadith();
     // Start background timer for countdown and "Now" updates
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (_cachedModel != null) {
@@ -51,6 +53,23 @@ class PrayerController extends GetxController {
   void onClose() {
     _timer?.cancel();
     super.onClose();
+  }
+  /// HADITH API FETCHING
+  /// ==========================================
+  Future<void> fetchDailyHadith() async {
+    try {
+      // Always use today's date for Hadith, not currentDate.value
+      final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      final url = "https://quran-api-production-eeb6.up.railway.app/api/daily-hadith/?date=$today";
+
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        dailyHadith.value = DailyHadithModel.fromJson(data);
+      }
+    } catch (e) {
+      print("Hadith fetch error: $e");
+    }
   }
 
   /// ==========================================

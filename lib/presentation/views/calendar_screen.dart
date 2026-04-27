@@ -115,23 +115,33 @@ class CalendarScreen extends GetView<CalendarController> {
         firstDay: DateTime(2020),
         lastDay: DateTime(2030),
         focusedDay: controller.focusedDay.value,
-        selectedDayPredicate: (day) => isSameDay(controller.selectedDay.value, day),
+
+        selectedDayPredicate: (day) =>
+            isSameDay(controller.selectedDay.value, day),
+
         onDaySelected: controller.onDaySelected,
+
         headerVisible: false,
-        daysOfWeekHeight: 28,
-        rowHeight: 54,
+        startingDayOfWeek: StartingDayOfWeek.sunday,
+
         calendarStyle: const CalendarStyle(
           outsideDaysVisible: false,
         ),
+
         calendarBuilders: CalendarBuilders(
           defaultBuilder: (context, day, _) {
-            return _dayCell(day, hasEvent: controller.hasEvent(day));
+            return _dayCell(day,
+                hasEvent: controller.hasEvent(day));
           },
           selectedBuilder: (context, day, _) {
-            return _dayCell(day, isSelected: true, hasEvent: controller.hasEvent(day));
+            return _dayCell(day,
+                isSelected: true,
+                hasEvent: controller.hasEvent(day));
           },
           todayBuilder: (context, day, _) {
-            return _dayCell(day, isToday: true, hasEvent: controller.hasEvent(day));
+            return _dayCell(day,
+                isToday: true,
+                hasEvent: controller.hasEvent(day));
           },
         ),
       );
@@ -189,15 +199,21 @@ class CalendarScreen extends GetView<CalendarController> {
       hijriColor = Colors.white;
       gregorianColor = Colors.white70;
     } else if (isToday) {
-      bgColor = Get.theme.primaryColor.withOpacity(0.12);
+      bgColor = Get.theme.primaryColor.withOpacity(0.2);
       hijriColor = Get.theme.primaryColor;
+    } else if (hasEvent) {
+      bgColor = const Color(0xff0A8F79).withOpacity(0.15);
+      hijriColor = const Color(0xff0A8F79);
     }
 
     return Container(
-      margin: const EdgeInsets.all(4),
+      margin: const EdgeInsets.all(6),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(8),
+        shape: BoxShape.circle,
+        border: hasEvent
+            ? Border.all(color: const Color(0xff0A8F79), width: 1)
+            : null,
       ),
       child: Stack(
         alignment: Alignment.center,
@@ -205,28 +221,44 @@ class CalendarScreen extends GetView<CalendarController> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CustomText(
-                text: hijri.hDay.toString(),
-                fontWeight: FontWeight.bold,
-                color: hijriColor,
-              ),
-              CustomText(
-                text: day.day.toString(),
-                fontSize: 11,
-                color: gregorianColor,
-              ),
+              /// 🔁 Toggle View
+              if (controller.isIslamic.value) ...[
+                CustomText(
+                  text: hijri.hDay.toString(),
+                  fontWeight: FontWeight.bold,
+                  color: hijriColor,
+                ),
+                CustomText(
+                  text: day.day.toString(),
+                  fontSize: 11,
+                  color: gregorianColor,
+                ),
+              ] else ...[
+                CustomText(
+                  text: day.day.toString(),
+                  fontWeight: FontWeight.bold,
+                  color: hijriColor,
+                ),
+                CustomText(
+                  text: hijri.hDay.toString(),
+                  fontSize: 11,
+                  color: gregorianColor,
+                ),
+              ],
             ],
           ),
 
-          /// Event Marker (Dot)
+          /// 🔥 Event Dot
           if (hasEvent)
             Positioned(
               bottom: 4,
               child: Container(
-                height: 4,
-                width: 4,
+                height: 5,
+                width: 5,
                 decoration: BoxDecoration(
-                  color: isSelected ? Colors.white : const Color(0xff0A8F79),
+                  color: isSelected
+                      ? Colors.white
+                      : const Color(0xff0A8F79),
                   shape: BoxShape.circle,
                 ),
               ),

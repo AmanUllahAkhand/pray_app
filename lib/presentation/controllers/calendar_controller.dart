@@ -101,16 +101,14 @@ class CalendarController extends GetxController {
   void onInit() {
     super.onInit();
 
-    // Sync dropdown with current Hijri date
     final hijriNow = HijriCalendar.now();
     selectedHijriMonth.value = hijriNow.hMonth;
     selectedHijriYear.value = hijriNow.hYear;
 
-    // Fetch events from API
     fetchEvents();
   }
 
-  /// Fetch events from API
+  /// Fetch events
   Future<void> fetchEvents() async {
     isLoading.value = true;
     try {
@@ -118,52 +116,68 @@ class CalendarController extends GetxController {
       final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> decodedData = json.decode(response.body);
-        final List list = decodedData['data'];
+        final decoded = json.decode(response.body);
+        final List list = decoded['data'];
 
-        events.value = list.map((e) => IslamicEventModel.fromJson(e)).toList();
+        events.value =
+            list.map((e) => IslamicEventModel.fromJson(e)).toList();
       }
     } catch (e) {
-      print("Error fetching events: $e");
+      print("Error: $e");
     } finally {
       isLoading.value = false;
     }
   }
 
-  /// Check if a specific calendar day has an event
+  /// Check event
   bool hasEvent(DateTime day) {
     return events.any((event) => isSameDay(event.dateTime, day));
   }
 
-  /// Called when a day is selected in TableCalendar
+  /// Day select
   void onDaySelected(DateTime selected, DateTime focused) {
     selectedDay.value = selected;
     focusedDay.value = focused;
 
-    // Update Hijri dropdown to match selected day
     final hDate = HijriCalendar.fromDate(selected);
     selectedHijriMonth.value = hDate.hMonth;
     selectedHijriYear.value = hDate.hYear;
   }
 
-  /// Hijri month text for top bar
+  /// Dropdown change (FIXED)
+  void onHijriMonthChanged(int month) {
+    selectedHijriMonth.value = month;
+
+    final hijri = HijriCalendar()
+      ..hYear = selectedHijriYear.value
+      ..hMonth = month
+      ..hDay = 1;
+
+    final gregorian = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      1,
+    );
+
+    focusedDay.value = gregorian;
+    selectedDay.value = gregorian;
+
+    fetchEvents();
+  }
+
+  /// Toggle calendar type
+  void toggleCalendarType() {
+    isIslamic.toggle();
+  }
+
   String get hijriMonthYear =>
       "${hijriMonths[selectedHijriMonth.value - 1]}, $selectedHijriYear";
 
-  /// Gregorian month range for top bar sub-text
   String get gregorianMonthRange {
     final start = DateFormat("MMMM").format(focusedDay.value);
-    final nextMonth = DateTime(focusedDay.value.year, focusedDay.value.month + 1);
-    final end = DateFormat("MMMM, yyyy").format(nextMonth);
-    return "$start–$end";
-  }
-
-  void onHijriMonthChanged(int month) {
-    selectedHijriMonth.value = month;
-    // Logic to jump calendar to that Hijri month could be added here
-  }
-
-  void toggleCalendarType() {
-    isIslamic.toggle();
+    final next =
+    DateTime(focusedDay.value.year, focusedDay.value.month + 1);
+    final end = DateFormat("MMMM, yyyy").format(next);
+    return "$start – $end";
   }
 }

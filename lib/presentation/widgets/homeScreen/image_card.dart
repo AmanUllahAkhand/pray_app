@@ -26,7 +26,11 @@ class ImageFeatureCardsSection extends StatelessWidget {
           child: SvgFeatureCard(
             title: "Record Your Prayer",
             svgPath: AppIcons.record_prayer_bg,
-            onTap: () {Get.toNamed(AppRoutes.sura);},
+            onTap: () {
+              if (Get.isRegistered<HomeController>()) {
+                Get.find<HomeController>().changeTab(1);
+              }
+              },
           ),
         ),
 

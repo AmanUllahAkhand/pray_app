@@ -74,7 +74,9 @@ class HomeContent extends StatelessWidget {
                       ),
 
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.toNamed(AppRoutes.support);
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: dragonBayColor,
                           shape: RoundedRectangleBorder(

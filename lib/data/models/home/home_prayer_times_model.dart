@@ -40,3 +40,20 @@ class PrayerSlot {
     );
   }
 }
+class Prayer {
+  final String name;
+  final String svgIcon;
+  final String time;
+  final String endTime;
+  bool isNotificationActive;
+  bool isChecked;
+
+  Prayer({
+    required this.name,
+    required this.svgIcon,
+    required this.time,
+    required this.endTime,
+    this.isNotificationActive = false,
+    this.isChecked = false,
+  });
+}

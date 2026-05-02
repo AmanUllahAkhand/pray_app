@@ -9,62 +9,44 @@ import '../controllers/bookmark_controller.dart';
 import '../widgets/custom_text.dart';
 
 class BookmarkScreen extends StatelessWidget {
+
   BookmarkScreen({super.key});
 
-  final BookmarkController controller = Get.put(BookmarkController());
+  final BookmarkController controller =
+  Get.find<BookmarkController>();
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: const Color(0xffF8F8F8),
 
       appBar: AppBar(
-        backgroundColor: const Color(0xffF8F8F8),
-        elevation: 0,
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: Colors.black,
-          ),
-        ),
-        title: const CustomText(
-          text: 'Bookmarks',
-          fontSize: 18,
-          fontWeight: FontWeight.w700,
-          color: Colors.black,
-        ),
+        title: const Text('Bookmarks'),
       ),
 
       body: Obx(() {
 
         if (controller.bookmarks.isEmpty) {
+
           return const Center(
-            child: CustomText(
-              text: 'No bookmarks added',
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
+            child: Text('No bookmarks added'),
           );
         }
 
-        return ListView.separated(
+        return ListView.builder(
           padding: const EdgeInsets.all(16),
           itemCount: controller.bookmarks.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 14),
           itemBuilder: (context, index) {
 
             final ayah = controller.bookmarks[index];
 
             return Container(
+              margin: const EdgeInsets.only(bottom: 14),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(18),
-                border: Border.all(
-                  color: Colors.grey.shade200,
-                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,25 +56,12 @@ class BookmarkScreen extends StatelessWidget {
                     children: [
 
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment:
-                          CrossAxisAlignment.start,
-                          children: [
-
-                            CustomText(
-                              text: ayah.arabic,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                            ),
-
-                            const SizedBox(height: 4),
-
-                            CustomText(
-                              text: 'Ayah ${ayah.ayah}',
-                              fontSize: 13,
-                              color: Colors.grey,
-                            ),
-                          ],
+                        child: Text(
+                          ayah.suraName,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
 
@@ -134,20 +103,21 @@ class BookmarkScreen extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
 
-                  CustomText(
-                    text: ayah.transliteration,
-                    fontSize: 13,
-                    color: Colors.black87,
+                  Text(
+                    ayah.transliteration,
+                    style: const TextStyle(fontSize: 13),
                   ),
 
                   const SizedBox(height: 8),
 
-                  CustomText(
-                    text: ayah.bangla,
-                    fontSize: 14,
-                    color: const Color(0xff0A8F79),
+                  Text(
+                    ayah.bangla,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Color(0xff0A8F79),
+                    ),
                   ),
                 ],
               ),

@@ -168,44 +168,47 @@ class SuraScreen extends GetView<SuraController> {
                       ),
                     ),
 
-                    InkWell(
-                      onTap: () {
 
-                        if (isBookmarked) {
+                    Obx(() {
 
-                          bookmarkController
-                              .removeBookmark(ayah);
+                      final isBookmarked =
+                      bookmarkController.isBookmarked(ayah);
 
-                        } else {
+                      return InkWell(
+                        onTap: () {
 
-                          bookmarkController
-                              .addBookmark(ayah);
-                        }
-                      },
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          color: isBookmarked
-                              ? const Color(0xff0A8F79)
-                              : Colors.white,
-                          borderRadius:
-                          BorderRadius.circular(12),
-                          border: Border.all(
+                          if (isBookmarked) {
+
+                            bookmarkController.removeBookmark(ayah);
+
+                          } else {
+
+                            bookmarkController.addBookmark(ayah);
+                          }
+                        },
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
                             color: isBookmarked
                                 ? const Color(0xff0A8F79)
-                                : Colors.grey.shade300,
+                                : Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: isBookmarked
+                                  ? const Color(0xff0A8F79)
+                                  : Colors.grey.shade300,
+                            ),
+                          ),
+                          child: Icon(
+                            Icons.bookmark,
+                            color: isBookmarked
+                                ? Colors.white
+                                : Colors.grey,
                           ),
                         ),
-                        child: Icon(
-                          Icons.bookmark,
-                          color: isBookmarked
-                              ? Colors.white
-                              : Colors.grey,
-                          size: 22,
-                        ),
-                      ),
-                    ),
+                      );
+                    })
                   ],
                 );
               }),

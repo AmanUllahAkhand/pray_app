@@ -14,90 +14,127 @@ class QuranScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: const Color(0xffF8F8F8),
       appBar: AppBar(
+        backgroundColor: const Color(0xffF8F8F8),
+        elevation: 0,
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () => Get.back(),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Colors.black87,
+            size: 20,
+          ),
+        ),
         title: const CustomText(
           text: 'Al-Quran',
           fontSize: 18,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
+          color: Colors.black,
         ),
-        centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              Get.dialog(
-                AlertDialog(
-                  title: const CustomText(
-                      text:'Search Sura'
-                  ),
-                  content: TextField(
-                    onChanged: controller.onSearch,
-                    decoration: const InputDecoration(
-                      hintText: 'Type sura name...',
-                    ),
-                  ),
-                ),
-              );
-            },
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: Container(
+              height: 36,
+              width: 36,
+              decoration: BoxDecoration(
+                color: const Color(0xff0E8B72),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(
+                Icons.bookmark,
+                color: Colors.white,
+                size: 20,
+              ),
+            ),
           ),
         ],
       ),
+
       body: Column(
         children: [
-          /// SVG Banner
+
+          /// Search Field
           Padding(
-            padding: const EdgeInsets.all(16),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.asset(
-                'assets/images/quran_banner.png',
-                height: 160,
-                width: double.infinity,
-                fit: BoxFit.cover,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 10,
+            ),
+            child: Container(
+              height: 52,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(28),
+                border: Border.all(
+                  color: Colors.grey.shade300,
+                ),
+              ),
+              child: TextField(
+                onChanged: controller.onSearch,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'Search by surah name or number',
+                  hintStyle: TextStyle(
+                    color: Colors.grey.shade500,
+                    fontSize: 14,
+                  ),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Colors.grey.shade500,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                ),
               ),
             ),
           ),
 
+          /// Sura List Title
           const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(horizontal: 20),
             child: Align(
               alignment: Alignment.centerLeft,
               child: CustomText(
-                text:'Sura List',
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+                text: 'Sura List',
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: Colors.black,
               ),
             ),
           ),
 
-          const SizedBox(height: 8),
+          const SizedBox(height: 14),
 
-          /// TableView (ListView)
+          /// List
           Expanded(
             child: Obx(() {
               if (controller.isLoading.value) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
               }
 
               return NotificationListener<ScrollNotification>(
                 onNotification: (scrollInfo) {
-                  if (scrollInfo.metrics.pixels ==
-                      scrollInfo.metrics.maxScrollExtent) {
+                  if (scrollInfo.metrics.pixels >=
+                      scrollInfo.metrics.maxScrollExtent - 100) {
                     controller.loadMore();
                   }
                   return false;
                 },
                 child: ListView.separated(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   itemCount: controller.filteredSuraList.length +
                       (controller.isLoadMore.value ? 1 : 0),
-                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  separatorBuilder: (_, __) =>
+                  const SizedBox(height: 14),
                   itemBuilder: (context, index) {
+
                     if (index == controller.filteredSuraList.length) {
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(12),
+                      return const Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Center(
                           child: CircularProgressIndicator(),
                         ),
                       );
@@ -106,23 +143,34 @@ class QuranScreen extends StatelessWidget {
                     final sura = controller.filteredSuraList[index];
 
                     return InkWell(
+                      borderRadius: BorderRadius.circular(18),
                       onTap: () => controller.onSuraTap(sura),
                       child: Container(
-                        padding: const EdgeInsets.all(14),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 16,
+                        ),
                         decoration: BoxDecoration(
-                          color: bashful,
-                          borderRadius: BorderRadius.circular(14),
+                          color: const Color(0xffEAF1EF),
+                          borderRadius: BorderRadius.circular(18),
                         ),
                         child: Row(
                           children: [
                             SuraCountBadge(count: sura.id.toString()),
                             const SizedBox(width: 12),
 
+                            const SizedBox(width: 14),
+
+                            /// Sura Info
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  CustomText(text: sura.nameEn),
+                                  CustomText(
+                                    text: sura.nameEn,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                   CustomText(
                                     text:
                                     'Verses: ${sura.verses} | ${sura.type}',
@@ -132,10 +180,13 @@ class QuranScreen extends StatelessWidget {
                               ),
                             ),
 
+                            /// Arabic Name
                             CustomText(
                               text: sura.nameAr,
                               color: Colors.teal,
                               fontFamily: 'Amiri',
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
                             ),
                           ],
                         ),
@@ -145,7 +196,7 @@ class QuranScreen extends StatelessWidget {
                 ),
               );
             }),
-          )
+          ),
         ],
       ),
     );

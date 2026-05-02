@@ -18,7 +18,7 @@ class QuranApiResponse {
 class QuranApiService {
   Future<QuranApiResponse> fetchSuraList({
     required int page,
-    int limit = 10,
+    int limit = 114,
   }) async {
     final url = Uri.parse(
       "https://quran-api-production-eeb6.up.railway.app/api/surah-list?page=$page&limit=$limit",

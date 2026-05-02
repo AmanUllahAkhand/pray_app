@@ -1,9 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../core/routes/app_routes.dart';
 import '../../data/datasources/Quran/quran_api_service.dart';
 import '../../data/models/quran/sura_model.dart';
 
 class QuranController extends GetxController {
+
+  final QuranApiService apiService = QuranApiService();
+
   final searchQuery = ''.obs;
 
   final suraList = <SuraModel>[].obs;
@@ -14,8 +18,6 @@ class QuranController extends GetxController {
   int currentPage = 1;
   int totalPages = 1;
 
-  final QuranApiService apiService = QuranApiService();
-
   @override
   void onInit() {
     super.onInit();
@@ -23,46 +25,72 @@ class QuranController extends GetxController {
   }
 
   Future<void> fetchSuras({bool isInitial = false}) async {
+
     try {
+
       if (isInitial) {
         isLoading.value = true;
         currentPage = 1;
       } else {
+
         if (currentPage > totalPages) return;
+
         isLoadMore.value = true;
       }
 
-      final res = await apiService.fetchSuraList(page: currentPage);
+      final response = await apiService.fetchSuraList(
+        page: currentPage,
+      );
 
-      totalPages = res.totalPages;
+      totalPages = response.totalPages;
 
       if (isInitial) {
-        suraList.value = res.data;
+        suraList.assignAll(response.data);
       } else {
-        suraList.addAll(res.data);
+        suraList.addAll(response.data);
       }
 
       currentPage++;
+
     } catch (e) {
-      print("Pagination error: $e");
+
+      debugPrint('Quran Fetch Error: $e');
+
     } finally {
+
       isLoading.value = false;
       isLoadMore.value = false;
     }
   }
 
   void loadMore() {
-    if (!isLoadMore.value && currentPage <= totalPages) {
+
+    if (!isLoadMore.value &&
+        currentPage <= totalPages) {
+
       fetchSuras();
     }
   }
 
   List<SuraModel> get filteredSuraList {
-    if (searchQuery.value.isEmpty) return suraList;
 
-    return suraList.where((s) {
-      return s.nameEn.toLowerCase().contains(searchQuery.value.toLowerCase()) ||
-          s.nameAr.contains(searchQuery.value);
+    if (searchQuery.value.isEmpty) {
+      return suraList;
+    }
+
+    return suraList.where((sura) {
+
+      return sura.nameEn
+          .toLowerCase()
+          .contains(searchQuery.value.toLowerCase()) ||
+
+          sura.nameAr
+              .contains(searchQuery.value) ||
+
+          sura.id
+              .toString()
+              .contains(searchQuery.value);
+
     }).toList();
   }
 
@@ -71,6 +99,7 @@ class QuranController extends GetxController {
   }
 
   void onSuraTap(SuraModel sura) {
+
     Get.toNamed(
       AppRoutes.sura,
       arguments: {

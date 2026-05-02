@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pray_app/core/constants/app_colors.dart';
+import '../../core/routes/app_routes.dart';
 import '../controllers/quran_controller.dart';
 import '../widgets/custom_text.dart';
 import '../widgets/quranScreen/sura_count_badge.dart';
@@ -19,6 +20,7 @@ class QuranScreen extends StatelessWidget {
         backgroundColor: const Color(0xffF8F8F8),
         elevation: 0,
         centerTitle: true,
+
         leading: IconButton(
           onPressed: () => Get.back(),
           icon: const Icon(
@@ -27,26 +29,36 @@ class QuranScreen extends StatelessWidget {
             size: 20,
           ),
         ),
+
         title: const CustomText(
           text: 'Al-Quran',
           fontSize: 18,
           fontWeight: FontWeight.w700,
           color: Colors.black,
         ),
+
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12),
-            child: Container(
-              height: 36,
-              width: 36,
-              decoration: BoxDecoration(
-                color: const Color(0xff0E8B72),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Icon(
-                Icons.bookmark,
-                color: Colors.white,
-                size: 20,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(10),
+
+              onTap: () {
+                Get.toNamed(AppRoutes.bookmark);
+              },
+
+              child: Container(
+                height: 36,
+                width: 36,
+                decoration: BoxDecoration(
+                  color: const Color(0xff0E8B72),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.bookmark,
+                  color: Colors.white,
+                  size: 20,
+                ),
               ),
             ),
           ),

@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:pray_app/core/constants/app_colors.dart';
 import '../../core/constants/app_icons.dart';
+import '../controllers/bookmark_controller.dart';
 import '../controllers/sura_controller.dart';
 import '../widgets/custom_text.dart';
 
@@ -91,8 +92,13 @@ class SuraScreen extends GetView<SuraController> {
   }
 
   Widget _buildNormalMode() {
+
+    final bookmarkController = Get.put(BookmarkController());
+
     return ListView.builder(
-      itemCount: controller.ayahs.length + (controller.isLoadMore.value ? 1 : 0) + 1,
+      itemCount: controller.ayahs.length +
+          (controller.isLoadMore.value ? 1 : 0) + 1,
+
       itemBuilder: (context, index) {
 
         /// ================= 1. BANNER =================
@@ -104,9 +110,12 @@ class SuraScreen extends GetView<SuraController> {
 
         /// ================= 2. LOADER =================
         if (realIndex == controller.ayahs.length) {
+
           return const Padding(
             padding: EdgeInsets.symmetric(vertical: 20),
-            child: Center(child: CircularProgressIndicator()),
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
           );
         }
 
@@ -114,36 +123,105 @@ class SuraScreen extends GetView<SuraController> {
 
         /// ================= 3. AYAH ITEM =================
         return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          padding: const EdgeInsets.all(12),
+          margin: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 8,
+          ),
+          padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.grey.shade300),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: Colors.grey.shade200,
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SvgPicture.asset(AppIcons.play, height: 22),
-                  const SizedBox(width: 12),
-                  SvgPicture.asset(AppIcons.bookmark, height: 20),
-                ],
-              ),
 
-              const SizedBox(height: 12),
+              /// ================= TOP ROW =================
+              Obx(() {
 
-              /// ================= ARABIC (Aligned Right) =================
+                final isBookmarked =
+                bookmarkController.isBookmarked(ayah);
+
+                return Row(
+                  mainAxisAlignment:
+                  MainAxisAlignment.spaceBetween,
+                  children: [
+
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xff0A8F79)
+                            .withOpacity(.1),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: CustomText(
+                        text: 'Ayah ${ayah.ayah}',
+                        fontSize: 12,
+                        color: const Color(0xff0A8F79),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+
+                    InkWell(
+                      onTap: () {
+
+                        if (isBookmarked) {
+
+                          bookmarkController
+                              .removeBookmark(ayah);
+
+                        } else {
+
+                          bookmarkController
+                              .addBookmark(ayah);
+                        }
+                      },
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          color: isBookmarked
+                              ? const Color(0xff0A8F79)
+                              : Colors.white,
+                          borderRadius:
+                          BorderRadius.circular(12),
+                          border: Border.all(
+                            color: isBookmarked
+                                ? const Color(0xff0A8F79)
+                                : Colors.grey.shade300,
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.bookmark,
+                          color: isBookmarked
+                              ? Colors.white
+                              : Colors.grey,
+                          size: 22,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }),
+
+              const SizedBox(height: 18),
+
+              /// ================= ARABIC =================
               Align(
-                alignment: Alignment.centerRight, // Forces the block to the right
+                alignment: Alignment.centerRight,
                 child: Directionality(
                   textDirection: TextDirection.rtl,
                   child: Text(
                     '${ayah.arabic} ۝ ${ayah.ayah}',
-                    textAlign: TextAlign.right, // Aligns text inside the block to the right
+                    textAlign: TextAlign.right,
                     style: const TextStyle(
-                      fontSize: 22,
+                      fontSize: 24,
                       fontFamily: 'Amiri',
                       height: 2,
                     ),
@@ -151,28 +229,22 @@ class SuraScreen extends GetView<SuraController> {
                 ),
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 18),
 
               /// ================= TRANSLITERATION =================
-              Align(
-                alignment: Alignment.centerLeft,
-                child: CustomText(
-                  text: ayah.transliteration,
-                  fontSize: 13,
-                  color: Colors.black87,
-                ),
+              CustomText(
+                text: ayah.transliteration,
+                fontSize: 13,
+                color: Colors.black87,
               ),
 
-              const SizedBox(height: 4),
+              const SizedBox(height: 8),
 
               /// ================= BANGLA =================
-              Align(
-                alignment: Alignment.centerLeft,
-                child: CustomText(
-                  text: ayah.bangla,
-                  fontSize: 13,
-                  color: Colors.teal.shade700,
-                ),
+              CustomText(
+                text: ayah.bangla,
+                fontSize: 14,
+                color: const Color(0xff0A8F79),
               ),
             ],
           ),

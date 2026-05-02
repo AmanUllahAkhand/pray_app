@@ -13,4 +13,5 @@ class AppRoutes {
   static const qibla = '/qibla';
   static const location = '/LocationSettingsScreen';
   static const sura = '/sura';
+  static const bookmark = '/bookmark';
 }
